@@ -1,0 +1,129 @@
+<header>
+  <nav class="border-gray-200 px-4 lg:px-6 py-2.5 bg-green-600">
+    <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+      <a href="" class="flex items-center">
+        <img src="/trailhunter-logo.png" class="mr-3 h-6 sm:h-9" alt="TrailHunter logo" />
+        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">TrailHunter</span>
+      </a>
+      <div class="flex items-center lg:order-2 gap-3 p-2">
+        <a href="/auth" class="text-white flex items-center gap-2 cursor-pointer p-2 rounded-lg
+                          transition-colors duration-300 hover:text-green-600 hover:bg-white">
+          <label class="cursor-pointer">Iniciar sesión</label>
+        </a>
+
+        <a class="text-green-600 flex items-center gap-3 p-2 bg-white rounded-lg cursor-pointer">
+          Empieza ya <i class="pi pi-arrow-right cursor-pointer"></i>
+        </a>
+
+        <!-- Botón de menú hamburguesa -->
+        <button id="menu-button" type="button"
+                (click)="toggleMenu()"
+                class="inline-flex items-center p-2 ml-1 text-sm rounded-lg lg:hidden
+                transition-all duration-300 ease-in-out
+                bg-transparent text-white hover:bg-white hover:text-green-600
+                focus:outline-none focus:ring-2 focus:ring-gray-200">
+          <span class="sr-only">Open main menu</span>
+
+          <!-- Icono de menú (hamburguesa) -->
+          <svg id="menu-icon" class="w-6 h-6 fill-current transition-all duration-300 ease-in-out"
+               [ngClass]="{'hidden': isMenuOpen}" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                  clip-rule="evenodd"></path>
+          </svg>
+
+          <!-- Icono de cerrar (X) -->
+          <svg id="close-icon" class="w-6 h-6 fill-current transition-all duration-300 ease-in-out"
+               [ngClass]="{'hidden': !isMenuOpen}" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menú móvil (oculto en escritorio, visible en móvil) -->
+      <div id="mobile-menu-2" [ngClass]="{'block': isMenuOpen, 'hidden': !isMenuOpen}"
+           class="lg:hidden justify-between items-center w-full">
+        <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white
+                transition-transform duration-300 hover:scale-105"
+               aria-current="page">Inicio</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Quienes somos</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Actividades</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Grupos</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Explorar</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Contacto</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Menú de escritorio (siempre visible en pantallas grandes) -->
+      <div class="hidden lg:flex justify-between items-center w-full lg:w-auto lg:order-1">
+        <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white
+                transition-transform duration-300 hover:scale-105"
+               aria-current="page">Inicio</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Quienes somos</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Actividades</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Grupos</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Explorar</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0
+                lg:hover:text-primary-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white
+                lg:dark:hover:bg-transparent dark:border-gray-700
+                transition-transform duration-300 hover:scale-105">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
