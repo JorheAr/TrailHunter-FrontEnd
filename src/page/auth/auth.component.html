@@ -1,1 +1,93 @@
-<p>auth works!</p>
+<div class="w-full flex h-full">
+  <!-- Sección izquierda (Fondo Verde) -->
+  <div class="flex flex-col w-full md:w-full bg-green-600 p-8 h-full">
+    <div class="flex justify-center mb-6 items-center">
+      <p-selectButton
+        [options]="stateOptions"
+        [(ngModel)]="activeForm"
+        optionLabel="label"
+        optionValue="value"
+        allowEmpty="false"
+        class="p-selectbutton p-2 rounded-md">
+      </p-selectButton>
+    </div>
+
+    <!-- Contenedor del formulario -->
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+      <!-- Formulario de Login -->
+      <div class="flex flex-col items-center w-full" *ngIf="activeForm=='login'">
+        <h2 class="mb-2 text-center text-2xl font-bold tracking-tight text-gray-800">Inicio de Sesión</h2>
+        <h2 class="mb-9 text-center text-l font-bold tracking-tight text-gray-600">¡Bienvenido de vuelta!</h2>
+        <div class="w-full space-y-4">
+          <div class="flex flex-col">
+            <label for="loginUsername" class="block text-m font-medium text-gray-700">Nombre de Usuario</label>
+            <input id="loginUsername" type="text" pInputText [(ngModel)]="loginFormData['loginUsername']" class="p-2 border rounded"/>
+          </div>
+          <div class="flex flex-col w-full">
+            <label for="loginPassword" class="block text-m font-medium text-gray-700">Contraseña</label>
+            <p-password id="loginPassword" toggleMask="true" [inputStyle]="{'width':'100%'}" [style]="{'width':'100%'}"></p-password>
+          </div>
+          <p-button [style]="{'width':'100%', 'margin-top':'2rem'}" type="submit" (onClick)="onLogin()" label="Iniciar Sesión" icon="pi pi-user"></p-button>
+        </div>
+      </div>
+
+      <!-- Formulario de Registro -->
+      <div class="flex flex-col items-center" *ngIf="activeForm=='register'">
+        <h2 class="mb-2 text-center text-2xl font-bold tracking-tight text-gray-800">Registro</h2>
+        <h2 class="mb-5 text-center text-l font-bold tracking-tight text-gray-600">¡Crea tu cuenta!</h2>
+
+        <div class="w-full space-y-4">
+          <!-- Nombre y Apellidos -->
+          <div class="flex flex-row gap-4">
+            <div class="flex flex-col w-1/2">
+              <label for="firstName" class="block text-m font-medium text-gray-700">Nombre</label>
+              <input type="text" id="firstName" pInputText [(ngModel)]="registerFormData['firstName']" class="p-2 border rounded w-full"/>
+            </div>
+            <div class="flex flex-col w-1/2">
+              <label for="lastName" class="block text-m font-medium text-gray-700">Apellidos</label>
+              <input type="text" id="lastName" pInputText [(ngModel)]="registerFormData['lastName']" class="p-2 border rounded w-full"/>
+            </div>
+          </div>
+
+          <!-- Nombre de Usuario -->
+          <div class="flex flex-col">
+            <label for="username" class="block text-m font-medium text-gray-700">Nombre de Usuario</label>
+            <input type="text" id="username" pInputText [(ngModel)]="registerFormData['username']" class="p-2 border rounded w-full"/>
+          </div>
+
+          <!-- Email -->
+          <div class="flex flex-col">
+            <label for="email" class="block text-m font-medium text-gray-700">Correo Electrónico</label>
+            <input type="email" id="email" pInputText [(ngModel)]="registerFormData['email']" class="p-2 border rounded w-full"/>
+          </div>
+
+          <!-- Fecha de Nacimiento -->
+          <div class="flex flex-col">
+            <label for="birthDate" class="block text-m font-medium text-gray-700">Fecha de Nacimiento</label>
+            <p-calendar id="birthDate" [(ngModel)]="registerFormData.birthDate" [showIcon]="true" inputId="birthDate" [inputStyle]="{'width':'100%'}" [style]="{'width':'100%'}"></p-calendar>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="flex flex-col w-full">
+            <label for="password" class="block text-m font-medium text-gray-700">Contraseña</label>
+            <p-password id="password" [(ngModel)]="registerFormData['password']" [toggleMask]="true" [feedback]="true" [inputStyle]="{'width':'100%'}" [style]="{'width':'100%'}"/>
+          </div>
+
+          <!-- Confirmar Contraseña -->
+          <div class="flex flex-col w-full">
+            <label for="confirmPassword" class="block text-m font-medium text-gray-700">Confirmar Contraseña</label>
+            <p-password id="confirmPassword" [(ngModel)]="registerFormData['confirmPassword']" [toggleMask]="true" [feedback]="false" [inputStyle]="{'width':'100%'}" [style]="{'width':'100%'}"/>
+          </div>
+
+          <!-- Botón de Registro -->
+          <p-button [style]="{'width':'100%', 'margin-top':'2rem'}" type="submit" (onClick)="onSubmit()" label="Registrarse" icon="pi pi-user"></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección derecha en blanco (Oculta en md y en cualquier tamaño menor) -->
+  <div class="hidden md:hidden lg:flex w-full h-full bg-white">
+    <img src="/hunt-ilustration.png" alt="Hunting Illustration" class="w-full object-cover"/>
+  </div>
+</div>
