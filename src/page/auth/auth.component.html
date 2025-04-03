@@ -64,7 +64,7 @@
           <!-- Fecha de Nacimiento -->
           <div class="flex flex-col">
             <label for="birthDate" class="block text-m font-medium text-gray-700">Fecha de Nacimiento</label>
-            <p-calendar id="birthDate" [(ngModel)]="registerFormData.birthDate" [showIcon]="true" inputId="birthDate" [inputStyle]="{'width':'100%'}" [style]="{'width':'100%'}"></p-calendar>
+            <p-calendar dateFormat="dd/mm/yy" id="birthDate" [(ngModel)]="registerFormData.birthDate" [showIcon]="true" inputId="birthDate" [inputStyle]="{'width':'100%'}" [style]="{'width':'100%'}"></p-calendar>
           </div>
 
           <!-- Contraseña -->
