@@ -30,7 +30,7 @@ export class AuthComponent {
     email: '',
     firstName: '',
     lastName: '',
-    birthDate: new Date()
+    birthDate: null
   };
 
   onLogin() {
