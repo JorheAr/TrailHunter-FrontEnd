@@ -6,15 +6,21 @@
         <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">TrailHunter</span>
       </a>
       <div class="flex items-center lg:order-2 gap-3 p-2">
-        <a href="/auth" class="text-white flex items-center gap-2 cursor-pointer p-2 rounded-lg
+        <!-- Si el usuario no está logueado -->
+        <a *ngIf="!isLoggedIn()" href="/auth" class="text-white flex items-center gap-2 cursor-pointer p-2 rounded-lg
                           transition-colors duration-300 hover:text-green-600 hover:bg-white">
           <label class="cursor-pointer">Iniciar sesión</label>
         </a>
 
-        <a class="text-green-600 flex items-center gap-3 p-2 bg-white rounded-lg cursor-pointer">
+        <a *ngIf="!isLoggedIn()" class="text-green-600 flex items-center gap-3 p-2 bg-white rounded-lg cursor-pointer">
           Empieza ya <i class="pi pi-arrow-right cursor-pointer"></i>
         </a>
 
+        <!-- Si el usuario está logueado -->
+        <a *ngIf="isLoggedIn()" (click)="logout()" class="text-white flex items-center gap-2 cursor-pointer p-2 rounded-lg
+                          transition-colors duration-300 hover:text-green-600 hover:bg-white">
+          <label class="cursor-pointer">Cerrar sesión</label>
+        </a>
         <!-- Botón de menú hamburguesa -->
         <button id="menu-button" type="button"
                 (click)="toggleMenu()"
@@ -48,7 +54,7 @@
            class="fixed top-[60px] left-0 w-full bg-green-600 shadow-xl z-50 lg:hidden h-auto">
         <ul class="flex flex-col pt-4 font-medium">
           <li>
-            <a href="#" class="block py-2 px-4 text-white transition-transform duration-300 hover:scale-105">Inicio</a>
+            <a href="/home" class="block py-2 px-4 text-white transition-transform duration-300 hover:scale-105">Inicio</a>
           </li>
           <li>
             <a href="/quienes-somos" class="block py-2 px-4 text-white transition-transform duration-300 hover:scale-105">Quienes somos</a>
@@ -72,7 +78,7 @@
       <div class="hidden lg:flex justify-between items-center w-full lg:w-auto lg:order-1">
         <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
           <li>
-            <a href="#" class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white
+            <a href="/home" class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white
                 transition-transform duration-300 hover:scale-105"
                aria-current="page">Inicio</a>
           </li>
