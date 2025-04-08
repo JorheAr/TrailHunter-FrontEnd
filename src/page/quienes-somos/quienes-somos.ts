@@ -4,13 +4,11 @@ import {HeaderComponent} from '../../component/header/header.component';
 @Component({
   selector: 'app-quienes-somos',
   templateUrl: './quienes-somos.html',
-  imports: [
-    HeaderComponent
-  ],
-  styleUrls: []  // No existe un archivo quienes-somos.css
+  imports: [],
+  standalone: true,
+  styleUrls: []
 })
 export class QuienesSomosComponent {
-  // Aquí puedes agregar lógica si es necesario
   public sections = [
     {
       title: 'Bienvenido a TrailHunter',
