@@ -16,11 +16,13 @@
           Empieza ya <i class="pi pi-arrow-right cursor-pointer"></i>
         </a>
 
-        <!-- Si el usuario está logueado -->
-        <a *ngIf="isLoggedIn()" (click)="logout()" class="text-white flex items-center gap-2 cursor-pointer p-2 rounded-lg
-                          transition-colors duration-300 hover:text-green-600 hover:bg-white">
-          <label class="cursor-pointer">Cerrar sesión</label>
-        </a>
+        <p-menu #userMenu [popup]="true" [model]="userItems"></p-menu>
+
+        <button *ngIf="isLoggedIn()" pButton type="button"
+                icon="pi pi-user"
+                class="rounded-full text-white hover:text-green-600"
+                (click)="userMenu.toggle($event)">
+        </button>
         <!-- Botón de menú hamburguesa -->
         <button id="menu-button" type="button"
                 (click)="toggleMenu()"
