@@ -30,6 +30,6 @@ export class HomeComponent implements OnInit {
         // Eliminar la bandera después de mostrar el toast
         localStorage.removeItem('hasLoggedIn');
       }
-    }, 100);  // Retardo de 100ms para asegurarse de que el componente se cargue correctamente
+    }, 100);
   }
 }

@@ -59,8 +59,10 @@ export class AuthComponent {
         // Si el login es exitoso, guardar el token y el nombre del usuario
         localStorage.setItem('token', response.access_token);
         localStorage.setItem('username', response.nombre);
+        localStorage.setItem("rol", response.rol);
         localStorage.setItem('hasLoggedIn', 'true');
 
+        console.log('Login successful:', response);
         this.messageService.add({
           severity: 'success',
           summary: 'Bienvenido',
