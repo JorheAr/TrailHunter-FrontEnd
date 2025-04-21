@@ -1,0 +1,22 @@
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white p-6">
+    <h2 class="text-2xl font-bold mb-6">Admin</h2>
+    <ul class="space-y-4">
+      <li>
+        <a routerLink="dashboard" routerLinkActive="font-bold underline" class="hover:underline">Dashboard</a>
+      </li>
+      <li>
+        <a routerLink="usuarios" routerLinkActive="font-bold underline" class="hover:underline">Usuarios</a>
+      </li>
+      <li>
+        <a routerLink="notificaciones" routerLinkActive="font-bold underline" class="hover:underline">Notificaciones</a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 bg-gray-100">
+    <router-outlet></router-outlet>
+  </main>
+</div>

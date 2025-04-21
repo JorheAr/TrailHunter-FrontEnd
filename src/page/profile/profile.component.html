@@ -1,0 +1,45 @@
+<div class="bg-white h-full w-full p-5 flex flex-col items-center justify-start">
+  <!-- Contenedor envolvente de imagen, estadísticas y botón -->
+  <div class="flex flex-col gap-6 w-2/3">
+    <!-- Contenedor de imagen + estadísticas -->
+    <div class="flex items-center gap-10">
+      <!-- Avatar de Usuario -->
+      <div class="flex justify-center items-center">
+        <img
+          [src]="avatarUrl"
+          class="w-34 h-34 rounded-full border-4 border-gray-300"
+          alt="Avatar de Usuario"
+        />
+      </div>
+
+      <!-- Estadísticas centradas -->
+      <div class="flex flex-col items-center gap-8">
+        <div class="flex gap-10">
+          <div class="flex flex-col items-center gap-2">
+            <label class="text-xl">Seguidores</label>
+            <label class="text-3xl font-semibold">{{ seguidores }}</label>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <label class="text-xl">Seguidos</label>
+            <label class="text-3xl font-semibold">{{ seguidos }}</label>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <label class="text-xl">Publicaciones</label>
+            <label class="text-3xl font-semibold">0</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón alineado al inicio del bloque -->
+    <div class="rounded-lg bg-gray-100 p-2 flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition self-start">
+      <i class="pi pi-pencil"></i>
+      <label class="text-gray-800 font-medium">Editar perfil</label>
+    </div>
+
+    <div class="flex p-2 border-b-1 border-gray-200">
+      <h1 class="text-2xl font-semibold">Tus publicaciones</h1>
+    </div>
+
+  </div>
+</div>
