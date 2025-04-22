@@ -10,6 +10,21 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
+
+  getUsuarioActual(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.get<any>(`${this.apiUrl}/me`, { headers });
+  }
+
+  enviarCorreoVerificacion(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.post<any>(`${this.apiUrl}/send-verification-email`, {}, { headers });
+  }
+
   getFollowStats(): Observable<{ seguidores: number; seguidos: number }> {
     // Recuperar el token JWT del localStorage o de algún otro lugar
     const token = localStorage.getItem('token');
