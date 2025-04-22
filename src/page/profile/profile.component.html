@@ -1,4 +1,19 @@
 <div class="bg-white h-full w-full p-5 flex flex-col items-center justify-start">
+  <!-- Loader -->
+  <app-loader *ngIf="cargando"></app-loader>
+
+  <!-- Aviso de verificación -->
+  <div *ngIf="!verificado" class="w-full flex justify-center mb-4">
+    <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 p-4 rounded-lg w-2/3 flex items-center justify-between">
+      <div>
+        <p><strong>Verificación necesaria:</strong> Para acceder a todas las funciones de tu cuenta debes verificar tu correo.</p>
+      </div>
+      <button (click)="enviarCorreoVerficacion()" class="bg-yellow-300 text-yellow-900 font-semibold px-4 py-2 rounded hover:bg-yellow-400 transition">
+        Verificar cuenta
+      </button>
+    </div>
+  </div>
+
   <!-- Contenedor envolvente de imagen, estadísticas y botón -->
   <div class="flex flex-col gap-6 w-2/3">
     <!-- Contenedor de imagen + estadísticas -->
@@ -39,6 +54,10 @@
 
     <div class="flex p-2 border-b-1 border-gray-200">
       <h1 class="text-2xl font-semibold">Tus publicaciones</h1>
+    </div>
+
+    <div class="flex p-2 border-b-1 border-gray-200">
+      <h1 class="text-2xl font-semibold">Actividades</h1>
     </div>
 
   </div>
