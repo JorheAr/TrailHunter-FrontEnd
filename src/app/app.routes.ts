@@ -8,6 +8,7 @@ import {Error403Component} from '../page/errors/error-403/error-403.component';
 import {Error401Component} from '../page/errors/error-401/error-401.component';
 import {Error404Component} from '../page/errors/error-404/error-404.component';
 import {ProfileComponent} from '../page/profile/profile.component';
+import {VerificarCorreoComponent} from '../page/verificar-correo/verificar-correo.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },
+  { path: 'verificar-correo', component: VerificarCorreoComponent },
   { path: 'error-401', component: Error401Component },
   { path: 'error-403', component: Error403Component },
   { path: 'error-404', component: Error404Component },
