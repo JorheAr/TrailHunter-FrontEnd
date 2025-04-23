@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import {BuscarUsuariosComponent} from '../../component/buscar-usuarios/buscar-usuarios.component';
 import {BuscarActividadesComponent} from '../../component/buscar-actividades/buscar-actividades.component';
 import {BuscarGruposComponent} from '../../component/buscar-grupos/buscar-grupos.component';
@@ -47,6 +47,8 @@ export class ExplorarComponent {
   usuariosCacheados: any[] | null = null;
   usuariosCargando = false;
 
+  constructor(private cdRef: ChangeDetectorRef) {}
+
   resetFiltros() {
     this.selectedCategoria = null;
     this.selectedFecha = null;
@@ -59,11 +61,13 @@ export class ExplorarComponent {
   onUsuariosTabActivado() {
     if (!this.usuariosCacheados) {
       this.usuariosCargando = true;
+      this.cdRef.detectChanges();
     }
   }
 
   onUsuariosCargados(usuarios: any[]) {
     this.usuariosCacheados = usuarios;
     this.usuariosCargando = false;
+    this.cdRef.detectChanges();
   }
 }

@@ -51,7 +51,11 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
     if (changes['query'] || changes['cache']) {
       this.filtrarResultados();
     }
+    if (changes['cache'] && this.cache) {
+      this.cargando = false;
+    }
   }
+
 
   cargarUsuarios(): void {
     this.userService.getUsuarios().subscribe((response) => {
@@ -62,8 +66,10 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
       this.totalRecords = this.usuarios.length;
       this.onLoad.emit(this.usuarios);
       this.filtrarResultados();
+      this.cargando = false;
     });
   }
+
 
   filtrarResultados(): void {
     this.resultadosFiltrados = this.usuarios.filter((usuario) =>

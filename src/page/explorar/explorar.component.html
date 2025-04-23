@@ -46,11 +46,12 @@
             [(ngModel)]="selectedFecha"
             dateFormat="dd/mm/yy"
             class="w-full"
+            styleClass="w-full"
           ></p-datepicker>
         </div>
 
         <!-- Botones de acción -->
-        <div class="flex justify-end gap-2 pt-2">
+        <div class="flex justify-evenly gap-2 pt-2">
           <button pButton label="Limpiar" class="p-button-secondary" (click)="resetFiltros()"></button>
           <button pButton label="Aplicar" class="p-button-success" (click)="aplicarFiltros(); filterPanel.hide()"></button>
         </div>
