@@ -1,0 +1,71 @@
+<!-- Loader mientras se cargan los usuarios -->
+<div *ngIf="cargando" class="flex flex-col justify-center items-center h-64">
+  <p-progressSpinner styleClass="w-12 h-12 mb-4" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+  <p class="text-gray-500 italic animate-pulse">Cargando usuarios...</p>
+</div>
+
+<!-- Contenido cargado -->
+<div *ngIf="!cargando" class="p-4">
+  <p *ngIf="query" class="font-semibold mb-4 text-lg">
+    Resultados para "{{ query }}":
+  </p>
+
+  <div *ngIf="!cargando && resultadosFiltrados.length === 0 && usuarios.length > 0" class="italic text-gray-500">
+    No se encontraron usuarios.
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div
+      *ngFor="let usuario of paginacionResult"
+      class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center hover:scale-[1.02] transition-transform"
+    >
+      <!-- Enlace para redirigir al perfil (envuelve toda la tarjeta, excepto los botones) -->
+      <a [routerLink]="['/usuario', usuario.id]" class="flex flex-col items-center w-full">
+        <img
+          *ngIf="usuario.avatar"
+          [src]="usuario.avatar"
+          alt="Avatar"
+          class="w-20 h-20 rounded-full object-cover mb-3"
+        />
+        <div class="text-center mb-3">
+          <h3 class="text-lg font-semibold text-gray-800">{{ usuario.username }}</h3>
+          <p *ngIf="usuario.cliente" class="text-sm text-gray-500">
+            {{ usuario.cliente.nombre }} {{ usuario.cliente.apellidos }}
+          </p>
+        </div>
+      </a>
+
+      <!-- Botones de seguir y dejar de seguir fuera del enlace -->
+      <div class="flex gap-2">
+        <button
+          *ngIf="!usuario.is_following"
+          pButton
+          label="Seguir"
+          (click)="seguirUsuario(usuario.id)"
+          class="p-button p-button-sm p-button-success"
+        ></button>
+        <button
+          *ngIf="usuario.is_following"
+          pButton
+          label="Dejar de seguir"
+          (click)="dejarDeSeguirUsuario(usuario.id)"
+          class="p-button p-button-sm p-button-danger"
+        ></button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card flex justify-center pt-10">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="first"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [showCurrentPageReport]="true"
+      [showPageLinks]="false"
+      [showJumpToPageDropdown]="false"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
+    ></p-paginator>
+  </div>
+</div>
