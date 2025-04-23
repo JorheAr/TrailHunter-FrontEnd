@@ -18,12 +18,18 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   providers: [MessageService]
 })
 export class ProfileComponent implements OnInit {
+
+  // Variables de estado
   verificado: boolean = false;
-  seguidores: number = 0;
-  seguidos: number = 0;
   username: string = '';
   avatarUrl: string = '';
   cargando: boolean = true;
+
+  // Contador seguidor y seguidos
+  seguidores: number = 0;
+  seguidos: number = 0;
+
+  // Listas seguidores / seguidos
   seguidoresList: any[] = [];
   seguidosList: any[] = [];
   seguidoresFiltrados: any[] = [];
@@ -32,8 +38,12 @@ export class ProfileComponent implements OnInit {
   seguidosModalVisible: boolean = false;
   seguidoresSearch: string = '';
   seguidosSearch: string = '';
+
+  // Modal editar perfil
   editarPerfilModalVisible: boolean = false;
   usernameEdit: string = '';
+
+  // Editar tamaño modal
   modalWidth = '50vw';
   editarPerfilWidth = '40vw';
 
