@@ -6,8 +6,6 @@ import {NgClass, NgSwitch, NgSwitchCase} from '@angular/common';
 import {ButtonDirective} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
-import {Dialog} from 'primeng/dialog';
-import {LoaderComponent} from '../../component/loader/loader.component';
 import {Select} from 'primeng/select';
 import {DatePicker} from 'primeng/datepicker';
 import {PopoverModule} from 'primeng/popover';
@@ -25,8 +23,6 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
     FormsModule,
     InputText,
     NgClass,
-    Dialog,
-    LoaderComponent,
     Select,
     DatePicker,
     PopoverModule,
