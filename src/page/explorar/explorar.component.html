@@ -1,0 +1,122 @@
+<div class="flex justify-center items-start min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-20">
+  <div class="w-full max-w-4xl space-y-8">
+
+    <!-- Título -->
+    <h2 class="text-3xl font-bold text-gray-800 text-center">Explorar</h2>
+
+    <!-- Buscador + Filtros -->
+    <div class="flex items-stretch gap-2">
+      <input
+        type="text"
+        pInputText
+        placeholder="Buscar..."
+        [(ngModel)]="searchQuery"
+        class="flex-1 h-[48px] p-3 rounded-lg border border-gray-300 focus:border-green-500 focus:outline-none"
+      />
+
+      <button
+        pButton
+        icon="pi pi-filter"
+        label="Filtros"
+        (click)="showFilterDialog = true"
+        class="h-[48px] px-4 rounded-lg border border-gray-400 text-gray-700 whitespace-nowrap"
+      ></button>
+    </div>
+
+    <!-- Dialog de Filtros Responsive -->
+    <p-dialog
+      header="Filtros de búsqueda"
+      [(visible)]="showFilterDialog"
+      [modal]="true"
+      [closable]="true"
+      [dismissableMask]="true"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+      [style]="{ width: '50vw', 'max-height': '80vh' }"
+      [draggable]="false"
+      [resizable]="false"
+    >
+      <div class="space-y-4 max-h-[60vh] overflow-y-auto">
+        <!-- Filtro: Categoría -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+          <p-dropdown
+            [options]="categorias"
+            [(ngModel)]="selectedCategoria"
+            placeholder="Selecciona una categoría"
+            class="w-full"
+          ></p-dropdown>
+        </div>
+
+        <!-- Filtro: Fecha -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+          <p-calendar
+            [(ngModel)]="selectedFecha"
+            dateFormat="dd/mm/yy"
+            class="w-full"
+          ></p-calendar>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex justify-end gap-2 pt-4">
+          <button pButton label="Cancelar" class="p-button-secondary" (click)="showFilterDialog = false"></button>
+          <button pButton label="Aplicar" class="p-button-success" (click)="aplicarFiltros()"></button>
+        </div>
+      </div>
+    </p-dialog>
+
+    <!-- Tabs con botones -->
+    <div class="flex justify-center gap-4">
+      <button
+        pButton
+        (click)="selectedTab = 'actividades'"
+        [ngClass]="{
+          'bg-green-500 text-white': selectedTab === 'actividades',
+          'p-button-outlined': selectedTab !== 'actividades'
+        }"
+        class="px-6 py-2 rounded-xl transition-colors duration-300"
+      >
+        Actividades
+      </button>
+      <button
+        pButton
+        (click)="selectedTab = 'usuarios'"
+        [ngClass]="{
+          'bg-green-500 text-white': selectedTab === 'usuarios',
+          'p-button-outlined': selectedTab !== 'usuarios'
+        }"
+        class="px-6 py-2 rounded-xl transition-colors duration-300"
+      >
+        Usuarios
+      </button>
+      <button
+        pButton
+        (click)="selectedTab = 'grupos'"
+        [ngClass]="{
+          'bg-green-500 text-white': selectedTab === 'grupos',
+          'p-button-outlined': selectedTab !== 'grupos'
+        }"
+        class="px-6 py-2 rounded-xl transition-colors duration-300"
+      >
+        Grupos
+      </button>
+    </div>
+
+    <!-- Vista dinámica -->
+    <div class="mt-8">
+      <ng-container [ngSwitch]="selectedTab">
+        <app-buscar-usuarios
+          *ngSwitchCase="'usuarios'"
+          [query]="searchQuery"
+          [cache]="usuariosCacheados"
+          [cargando]="usuariosCargando"
+          (onLoad)="onUsuariosCargados($event)"
+          (loadTrigger)="onUsuariosTabActivado()"
+        ></app-buscar-usuarios>
+        <app-buscar-actividades *ngSwitchCase="'actividades'" [query]="searchQuery"></app-buscar-actividades>
+        <app-buscar-grupos *ngSwitchCase="'grupos'" [query]="searchQuery"></app-buscar-grupos>
+      </ng-container>
+    </div>
+
+  </div>
+</div>
