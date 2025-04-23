@@ -40,10 +40,7 @@ export class UserService {
   }
 
   getFollowStats(): Observable<{ seguidores: number; seguidos: number }> {
-    // Recuperar el token JWT del localStorage o de algún otro lugar
     const token = localStorage.getItem('token');
-
-    // Si hay un token, lo incluimos en los headers
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
 
     return this.http
@@ -66,6 +63,19 @@ export class UserService {
     );
   }
 
+  getFollowers(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.get<any>(`${this.apiUrl}/seguidores`, { headers });
+  }
+
+  getFollowing(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.get<any>(`${this.apiUrl}/seguidos`, { headers });
+  }
 
   followUser(userId: number): Observable<any> {
     const token = localStorage.getItem('token');

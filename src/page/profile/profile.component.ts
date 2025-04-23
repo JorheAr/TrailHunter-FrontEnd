@@ -3,11 +3,15 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { MessageService } from 'primeng/api';
 import { LoaderComponent } from '../../component/loader/loader.component';
+import { Router } from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {Dialog} from 'primeng/dialog';
+import {InputText} from 'primeng/inputtext';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText],
   templateUrl: './profile.component.html',
   providers: [MessageService]
 })
@@ -18,23 +22,28 @@ export class ProfileComponent implements OnInit {
   username: string = '';
   avatarUrl: string = '';
   cargando: boolean = true;
+  seguidoresList: any[] = [];
+  seguidosList: any[] = [];
+  seguidoresFiltrados: any[] = [];
+  seguidosFiltrados: any[] = [];
+  seguidoresModalVisible: boolean = false;
+  seguidosModalVisible: boolean = false;
+  seguidoresSearch: string = '';
+  seguidosSearch: string = '';
 
-  constructor(private userService: UserService, private messageService: MessageService) {}
+  constructor(private userService: UserService, private messageService: MessageService, private router: Router) {}
 
   ngOnInit(): void {
-    // Obtener el nombre de usuario desde el localStorage
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       this.username = storedUsername;
       this.avatarUrl = `https://api.dicebear.com/6.x/lorelei-neutral/png?seed=${this.username}`;
     }
 
-    // Obtener los datos de usuario
     this.userService.getUsuarioActual().subscribe(usuario => {
       this.verificado = usuario.verificado;
     });
 
-    // Obtener las estadísticas de seguidores y seguidos
     this.userService.getFollowStats().subscribe({
       next: (data) => {
         this.seguidores = data.seguidores;
@@ -57,5 +66,43 @@ export class ProfileComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo enviar el correo' });
       }
     });
+  }
+
+  verSeguidores() {
+    this.userService.getFollowers().subscribe((data) => {
+      this.seguidoresList = data.seguidores;
+      this.seguidoresFiltrados = [...this.seguidoresList];
+      this.seguidoresModalVisible = true;
+    });
+  }
+
+  verSeguidos() {
+    this.userService.getFollowing().subscribe((data) => {
+      this.seguidosList = data.seguidos;
+      this.seguidosFiltrados = [...this.seguidosList];
+      this.seguidosModalVisible = true;
+    });
+  }
+
+  verPerfil(userId: number) {
+    this.router.navigate([`/usuario/${userId}`]);
+  }
+
+  // Filtrar seguidores por nombre de usuario
+  filtrarSeguidores() {
+    this.seguidoresFiltrados = this.seguidoresList.filter(seguidor =>
+      seguidor.username.toLowerCase().includes(this.seguidoresSearch.toLowerCase())
+    );
+  }
+
+  // Filtrar seguidos por nombre de usuario
+  filtrarSeguidos() {
+    this.seguidosFiltrados = this.seguidosList.filter(seguido =>
+      seguido.username.toLowerCase().includes(this.seguidosSearch.toLowerCase())
+    );
+  }
+
+  getAvatarUrl(username: string): string {
+    return `https://api.dicebear.com/6.x/lorelei-neutral/png?seed=${username}`;
   }
 }

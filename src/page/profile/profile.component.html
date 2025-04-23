@@ -30,11 +30,11 @@
       <!-- Estadísticas centradas -->
       <div class="flex flex-col items-center gap-8">
         <div class="flex gap-10">
-          <div class="flex flex-col items-center gap-2">
+          <div (click)="verSeguidores()" class="flex flex-col items-center gap-2 cursor-pointer">
             <label class="text-xl">Seguidores</label>
             <label class="text-3xl font-semibold">{{ seguidores }}</label>
           </div>
-          <div class="flex flex-col items-center gap-2">
+          <div (click)="verSeguidos()" class="flex flex-col items-center gap-2 cursor-pointer">
             <label class="text-xl">Seguidos</label>
             <label class="text-3xl font-semibold">{{ seguidos }}</label>
           </div>
@@ -59,6 +59,42 @@
     <div class="flex p-2 border-b-1 border-gray-200">
       <h1 class="text-2xl font-semibold">Actividades</h1>
     </div>
-
   </div>
+
+  <!-- Modal de Seguidores -->
+  <p-dialog header="Seguidores" [(visible)]="seguidoresModalVisible" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '50vw'}">
+    <div class="flex items-center gap-2 mb-4">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="seguidoresSearch"
+        (input)="filtrarSeguidores()"
+        placeholder="Buscar seguidores..."
+        class="w-full p-2 border rounded-md"
+      />
+    </div>
+    <div *ngFor="let seguidor of seguidoresFiltrados" class="flex hover:bg-gray-100 p-2 rounded items-center gap-4 mb-3 cursor-pointer" (click)="verPerfil(seguidor.id)">
+      <img [src]="getAvatarUrl(seguidor.username)" class="w-10 h-10 rounded-full" alt="Avatar de Seguidor" />
+      <p class="font-semibold">{{ seguidor.username }}</p>
+    </div>
+  </p-dialog>
+
+  <!-- Modal de Seguidos -->
+  <p-dialog header="Seguidos" [(visible)]="seguidosModalVisible" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: '50vw'}">
+    <div class="flex items-center gap-2 mb-4">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="seguidosSearch"
+        (input)="filtrarSeguidos()"
+        placeholder="Buscar seguidos..."
+        class="w-full p-2 border rounded-md"
+      />
+    </div>
+    <div *ngFor="let seguido of seguidosFiltrados" class="flex hover:bg-gray-100 p-2 rounded items-center gap-4 mb-3 cursor-pointer" (click)="verPerfil(seguido.id)">
+      <img [src]="getAvatarUrl(seguido.username)" class="w-10 h-10 rounded-full" alt="Avatar de Seguido" />
+      <p class="font-semibold">{{ seguido.username }}</p>
+    </div>
+  </p-dialog>
+
 </div>
