@@ -51,10 +51,6 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
     if (changes['query'] || changes['cache']) {
       this.filtrarResultados();
     }
-
-    if (changes['cargando']) {
-      console.log('Cargando cambió:', this.cargando);
-    }
   }
 
   cargarUsuarios(): void {
