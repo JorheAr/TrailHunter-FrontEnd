@@ -90,4 +90,11 @@ export class UserService {
 
     return this.http.post<any>(`${this.apiUrl}/unfollow`, { user_id: userId }, { headers });
   }
+
+  actualizarPerfil(data: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.put<any>(`${this.apiUrl}/editar-perfil`, data, { headers });
+  }
 }

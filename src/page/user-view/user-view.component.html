@@ -12,7 +12,11 @@
         />
       </div>
 
-      <div class="flex flex-col items-center gap-8">
+      <div class="flex flex-col items-center gap-4">
+        <!-- Nombre del usuario -->
+        <h2 class="text-2xl w-full font-bold text-gray-800" *ngIf="usuario">{{ usuario.username }}</h2>
+
+        <!-- Estadísticas -->
         <div class="flex gap-10">
           <div class="flex flex-col items-center gap-2">
             <label class="text-xl">Seguidores</label>

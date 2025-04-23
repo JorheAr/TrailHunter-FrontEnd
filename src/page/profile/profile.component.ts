@@ -7,11 +7,13 @@ import { Router } from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {Dialog} from 'primeng/dialog';
 import {InputText} from 'primeng/inputtext';
+import {Toast} from 'primeng/toast';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText],
+  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText, Toast],
   templateUrl: './profile.component.html',
   providers: [MessageService]
 })
@@ -30,8 +32,12 @@ export class ProfileComponent implements OnInit {
   seguidosModalVisible: boolean = false;
   seguidoresSearch: string = '';
   seguidosSearch: string = '';
+  editarPerfilModalVisible: boolean = false;
+  usernameEdit: string = '';
+  modalWidth = '50vw';
+  editarPerfilWidth = '40vw';
 
-  constructor(private userService: UserService, private messageService: MessageService, private router: Router) {}
+  constructor(private userService: UserService, private messageService: MessageService, private router: Router, private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit(): void {
     const storedUsername = localStorage.getItem('username');
@@ -55,6 +61,56 @@ export class ProfileComponent implements OnInit {
         this.cargando = false;
       }
     });
+
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
+      if (result.matches) {
+        this.modalWidth = '90%';
+        this.editarPerfilWidth = '90%';
+      } else {
+        this.modalWidth = '50vw';
+        this.editarPerfilWidth = '40vw';
+      }
+    });
+  }
+
+  abrirEditarPerfil() {
+    if (!this.verificado) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Verificación requerida',
+        detail: 'Debes verificar tu cuenta antes de editar tu perfil.'
+      });
+      return;
+    }
+
+    this.actualizarAnchoModal();
+    this.usernameEdit = this.username;
+    this.editarPerfilModalVisible = true;
+  }
+
+  guardarCambios() {
+    if (!this.usernameEdit.trim()) return;
+
+    this.userService.actualizarPerfil({ username: this.usernameEdit }).subscribe({
+      next: () => {
+        this.username = this.usernameEdit;
+        localStorage.setItem('username', this.usernameEdit);
+        this.avatarUrl = `https://api.dicebear.com/6.x/lorelei-neutral/png?seed=${this.usernameEdit}`;
+        this.editarPerfilModalVisible = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Perfil actualizado',
+          detail: 'Tu nombre de usuario se ha actualizado con éxito.'
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el perfil.'
+        });
+      }
+    });
   }
 
   enviarCorreoVerficacion() {
@@ -70,6 +126,7 @@ export class ProfileComponent implements OnInit {
 
   verSeguidores() {
     this.userService.getFollowers().subscribe((data) => {
+      this.actualizarAnchoModal();
       this.seguidoresList = data.seguidores;
       this.seguidoresFiltrados = [...this.seguidoresList];
       this.seguidoresModalVisible = true;
@@ -78,6 +135,7 @@ export class ProfileComponent implements OnInit {
 
   verSeguidos() {
     this.userService.getFollowing().subscribe((data) => {
+      this.actualizarAnchoModal();
       this.seguidosList = data.seguidos;
       this.seguidosFiltrados = [...this.seguidosList];
       this.seguidosModalVisible = true;
@@ -104,5 +162,17 @@ export class ProfileComponent implements OnInit {
 
   getAvatarUrl(username: string): string {
     return `https://api.dicebear.com/6.x/lorelei-neutral/png?seed=${username}`;
+  }
+
+  private actualizarAnchoModal() {
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
+      if (result.matches) {
+        this.modalWidth = '90%';
+        this.editarPerfilWidth = '90%';
+      } else {
+        this.modalWidth = '50vw';
+        this.editarPerfilWidth = '40vw';
+      }
+    });
   }
 }
