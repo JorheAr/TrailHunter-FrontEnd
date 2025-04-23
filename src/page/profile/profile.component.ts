@@ -82,8 +82,6 @@ export class ProfileComponent implements OnInit {
       });
       return;
     }
-
-    this.actualizarAnchoModal();
     this.usernameEdit = this.username;
     this.editarPerfilModalVisible = true;
   }
@@ -126,7 +124,6 @@ export class ProfileComponent implements OnInit {
 
   verSeguidores() {
     this.userService.getFollowers().subscribe((data) => {
-      this.actualizarAnchoModal();
       this.seguidoresList = data.seguidores;
       this.seguidoresFiltrados = [...this.seguidoresList];
       this.seguidoresModalVisible = true;
@@ -135,7 +132,6 @@ export class ProfileComponent implements OnInit {
 
   verSeguidos() {
     this.userService.getFollowing().subscribe((data) => {
-      this.actualizarAnchoModal();
       this.seguidosList = data.seguidos;
       this.seguidosFiltrados = [...this.seguidosList];
       this.seguidosModalVisible = true;
@@ -146,14 +142,12 @@ export class ProfileComponent implements OnInit {
     this.router.navigate([`/usuario/${userId}`]);
   }
 
-  // Filtrar seguidores por nombre de usuario
   filtrarSeguidores() {
     this.seguidoresFiltrados = this.seguidoresList.filter(seguidor =>
       seguidor.username.toLowerCase().includes(this.seguidoresSearch.toLowerCase())
     );
   }
 
-  // Filtrar seguidos por nombre de usuario
   filtrarSeguidos() {
     this.seguidosFiltrados = this.seguidosList.filter(seguido =>
       seguido.username.toLowerCase().includes(this.seguidosSearch.toLowerCase())
@@ -162,17 +156,5 @@ export class ProfileComponent implements OnInit {
 
   getAvatarUrl(username: string): string {
     return `https://api.dicebear.com/6.x/lorelei-neutral/png?seed=${username}`;
-  }
-
-  private actualizarAnchoModal() {
-    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).subscribe(result => {
-      if (result.matches) {
-        this.modalWidth = '90%';
-        this.editarPerfilWidth = '90%';
-      } else {
-        this.modalWidth = '50vw';
-        this.editarPerfilWidth = '40vw';
-      }
-    });
   }
 }
