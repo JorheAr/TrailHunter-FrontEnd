@@ -6,10 +6,12 @@ import {NgClass, NgSwitch, NgSwitchCase} from '@angular/common';
 import {ButtonDirective} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
-import {Calendar} from 'primeng/calendar';
-import {DropdownModule} from 'primeng/dropdown';
 import {Dialog} from 'primeng/dialog';
 import {LoaderComponent} from '../../component/loader/loader.component';
+import {Select} from 'primeng/select';
+import {DatePicker} from 'primeng/datepicker';
+import {PopoverModule} from 'primeng/popover';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-explorar',
@@ -23,16 +25,18 @@ import {LoaderComponent} from '../../component/loader/loader.component';
     FormsModule,
     InputText,
     NgClass,
-    Calendar,
-    DropdownModule,
     Dialog,
-    LoaderComponent
+    LoaderComponent,
+    Select,
+    DatePicker,
+    PopoverModule,
+    OverlayPanelModule
   ],
   standalone: true,
   templateUrl: './explorar.component.html'
 })
 export class ExplorarComponent {
-  showFilterDialog = false;
+  popoverVisible: boolean = false;
   categorias = [
     { label: 'Todas', value: null },
     { label: 'Deporte', value: 'deporte' },
@@ -47,8 +51,13 @@ export class ExplorarComponent {
   usuariosCacheados: any[] | null = null;
   usuariosCargando = false;
 
+  resetFiltros() {
+    this.selectedCategoria = null;
+    this.selectedFecha = null;
+  }
+
   aplicarFiltros() {
-    this.showFilterDialog = false;
+    // Lógica de filtrado aquí
   }
 
   onUsuariosTabActivado() {
