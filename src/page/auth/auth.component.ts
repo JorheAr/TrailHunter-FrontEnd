@@ -71,7 +71,7 @@ export class AuthComponent {
         this.router.navigate(['/home']);
       },
       error: (error: HttpErrorResponse) => {
-        const msg = error.error?.message || 'Credenciales incorrectas';
+        const msg = error.error?.message || 'A ocurrido un error';
         this.messageService.add({
           severity: 'error',
           summary: 'Error de login',
