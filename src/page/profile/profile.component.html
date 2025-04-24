@@ -1,6 +1,8 @@
 <div class="bg-white h-full w-full p-5 flex flex-col items-center justify-start">
   <!-- Loader -->
   <app-loader *ngIf="cargando"></app-loader>
+  <p-toast></p-toast>
+
 
   <!-- Aviso de verificación -->
   <div *ngIf="!verificado" class="w-full flex justify-center mb-4">
@@ -15,11 +17,11 @@
   </div>
 
   <!-- Contenedor envolvente de imagen, estadísticas y botón -->
-  <div class="flex flex-col gap-6 w-2/3">
+  <div class="flex flex-col gap-6 md:w-2/3 mx-auto w-full">
     <!-- Contenedor de imagen + estadísticas -->
-    <div class="flex items-center gap-10">
+    <div class="flex flex-col md:flex-row items-center gap-10">
       <!-- Avatar de Usuario -->
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center mb-4 md:mb-0">
         <img
           [src]="avatarUrl"
           class="w-34 h-34 rounded-full border-4 border-gray-300"
@@ -27,38 +29,94 @@
         />
       </div>
 
-      <!-- Estadísticas centradas -->
-      <div class="flex flex-col items-center gap-8">
+      <!-- Nombre + Estadísticas -->
+      <div class="flex flex-col items-center gap-4 text-center">
+        <!-- Nombre del usuario -->
+        <h2 class="text-2xl md:text-xl text-center sm:text-start w-full font-bold text-gray-800">{{ username }}</h2>
+
+        <!-- Estadísticas centradas -->
         <div class="flex gap-10">
-          <div class="flex flex-col items-center gap-2">
-            <label class="text-xl">Seguidores</label>
-            <label class="text-3xl font-semibold">{{ seguidores }}</label>
+          <div (click)="verSeguidores()" class="flex flex-col items-center gap-2 cursor-pointer">
+            <label class="text-sm sm:text-xl cursor-pointer">Seguidores</label>
+            <label class="text-xl sm:text-3xl cursor-pointer font-semibold">{{ seguidores }}</label>
+          </div>
+          <div (click)="verSeguidos()" class="flex flex-col items-center gap-2 cursor-pointer">
+            <label class="text-sm sm:text-xl cursor-pointer">Seguidos</label>
+            <label class="text-xl sm:text-3xl cursor-pointer font-semibold">{{ seguidos }}</label>
           </div>
           <div class="flex flex-col items-center gap-2">
-            <label class="text-xl">Seguidos</label>
-            <label class="text-3xl font-semibold">{{ seguidos }}</label>
-          </div>
-          <div class="flex flex-col items-center gap-2">
-            <label class="text-xl">Publicaciones</label>
-            <label class="text-3xl font-semibold">0</label>
+            <label class="text-sm sm:text-xl">Publicaciones</label>
+            <label class="text-xl sm:text-3xl font-semibold">0</label>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Botón alineado al inicio del bloque -->
-    <div class="rounded-lg bg-gray-100 p-2 flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition self-start">
+    <!-- Botón de Editar Perfil -->
+    <div
+      class="rounded-lg bg-gray-100 p-2 justify-center flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition self-start w-full sm:w-[170px]"
+      (click)="abrirEditarPerfil()"
+    >
       <i class="pi pi-pencil"></i>
       <label class="text-gray-800 font-medium">Editar perfil</label>
     </div>
 
-    <div class="flex p-2 border-b-1 border-gray-200">
-      <h1 class="text-2xl font-semibold">Tus publicaciones</h1>
+    <div class="flex p-2 border-b-1 border-gray-200 md:w-full">
+      <h1 class="text-xl sm:text-2xl font-semibold">Tus publicaciones</h1>
     </div>
 
-    <div class="flex p-2 border-b-1 border-gray-200">
-      <h1 class="text-2xl font-semibold">Actividades</h1>
+    <div class="flex p-2 border-b-1 border-gray-200 md:w-full">
+      <h1 class="text-xl sm:text-2xl font-semibold">Actividades</h1>
     </div>
-
   </div>
+
+  <!-- Modal de Seguidores -->
+  <p-dialog header="Seguidores" [(visible)]="seguidoresModalVisible" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: modalWidth}">
+    <div class="flex items-center gap-2 mb-4">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="seguidoresSearch"
+        (input)="filtrarSeguidores()"
+        placeholder="Buscar seguidores..."
+        class="w-full p-2 border rounded-md"
+      />
+    </div>
+    <div *ngFor="let seguidor of seguidoresFiltrados" class="flex hover:bg-gray-100 p-2 rounded items-center gap-4 mb-3 cursor-pointer" (click)="verPerfil(seguidor.id)">
+      <img [src]="getAvatarUrl(seguidor.username)" class="w-10 h-10 rounded-full" alt="Avatar de Seguidor" />
+      <p class="font-semibold">{{ seguidor.username }}</p>
+    </div>
+  </p-dialog>
+
+  <!-- Modal de Seguidos -->
+  <p-dialog header="Seguidos" [(visible)]="seguidosModalVisible" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: modalWidth}">
+    <div class="flex items-center gap-2 mb-4">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="seguidosSearch"
+        (input)="filtrarSeguidos()"
+        placeholder="Buscar seguidos..."
+        class="w-full p-2 border rounded-md"
+      />
+    </div>
+    <div *ngFor="let seguido of seguidosFiltrados" class="flex hover:bg-gray-100 p-2 rounded items-center gap-4 mb-3 cursor-pointer" (click)="verPerfil(seguido.id)">
+      <img [src]="getAvatarUrl(seguido.username)" class="w-10 h-10 rounded-full" alt="Avatar de Seguido" />
+      <p class="font-semibold">{{ seguido.username }}</p>
+    </div>
+  </p-dialog>
+
+  <!-- Modal de edición de perfil -->
+  <p-dialog header="Editar perfil" [(visible)]="editarPerfilModalVisible" [modal]="true" [closable]="true" [responsive]="true" [style]="{width: editarPerfilWidth}">
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col">
+        <label class="font-semibold mb-1">Nombre de usuario</label>
+        <input pInputText [(ngModel)]="usernameEdit" class="p-2 border rounded-md" />
+      </div>
+      <button (click)="guardarCambios()" class="mt-4 bg-green-500 text-white font-semibold px-4 py-2 rounded hover:bg-green-600 transition">
+        Guardar cambios
+      </button>
+    </div>
+  </p-dialog>
+
 </div>

@@ -9,6 +9,8 @@ import {Error401Component} from '../page/errors/error-401/error-401.component';
 import {Error404Component} from '../page/errors/error-404/error-404.component';
 import {ProfileComponent} from '../page/profile/profile.component';
 import {VerificarCorreoComponent} from '../page/verificar-correo/verificar-correo.component';
+import {ExplorarComponent} from '../page/explorar/explorar.component';
+import {UserViewComponent} from '../page/user-view/user-view.component';
 
 
 export const routes: Routes = [
@@ -16,6 +18,8 @@ export const routes: Routes = [
   {'path': 'quienes-somos', 'component': QuienesSomosComponent},
   {'path': 'home', 'component': HomeComponent},
   {'path': 'profile', 'component': ProfileComponent},
+  {'path': 'explorar', 'component': ExplorarComponent},
+  { path: 'usuario/:id', 'component': UserViewComponent },
   {
     path: 'admin',
     component: AdminComponent,
@@ -31,6 +35,6 @@ export const routes: Routes = [
   { path: 'error-401', component: Error401Component },
   { path: 'error-403', component: Error403Component },
   { path: 'error-404', component: Error404Component },
-
-  { path: '**', redirectTo: 'error-404' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'error-404' }
 ];
