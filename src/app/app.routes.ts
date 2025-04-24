@@ -19,7 +19,7 @@ export const routes: Routes = [
   {'path': 'home', 'component': HomeComponent},
   {'path': 'profile', 'component': ProfileComponent},
   {'path': 'explorar', 'component': ExplorarComponent},
-  { path: 'usuario/:id', component: UserViewComponent },
+  { path: 'usuario/:id', 'component': UserViewComponent },
   {
     path: 'admin',
     component: AdminComponent,
@@ -35,6 +35,6 @@ export const routes: Routes = [
   { path: 'error-401', component: Error401Component },
   { path: 'error-403', component: Error403Component },
   { path: 'error-404', component: Error404Component },
-
-  { path: '**', redirectTo: 'error-404' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'error-404' }
 ];
