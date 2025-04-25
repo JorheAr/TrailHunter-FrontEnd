@@ -39,6 +39,12 @@ export class ProfileComponent implements OnInit {
   seguidoresSearch: string = '';
   seguidosSearch: string = '';
 
+  // Lista de bloqueados
+  bloqueadosList: any[] = [];
+  bloqueadosFiltrados: any[] = [];
+  bloqueadosModalVisible: boolean = false;
+  bloqueadosSearch: string = '';
+
   // Modal editar perfil
   editarPerfilModalVisible: boolean = false;
   usernameEdit: string = '';
@@ -81,7 +87,18 @@ export class ProfileComponent implements OnInit {
         this.editarPerfilWidth = '40vw';
       }
     });
+
+    this.userService.getBlockedUsers().subscribe({
+      next: (data) => {
+        this.bloqueadosList = data.bloqueados;
+        this.bloqueadosFiltrados = [...this.bloqueadosList];
+      },
+      error: (err) => {
+        console.error('Error al obtener bloqueados', err);
+      }
+    });
   }
+
 
   abrirEditarPerfil() {
     if (!this.verificado) {
@@ -94,6 +111,18 @@ export class ProfileComponent implements OnInit {
     }
     this.usernameEdit = this.username;
     this.editarPerfilModalVisible = true;
+  }
+
+  abrirGetBloqueados() {
+    if (!this.verificado) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Verificación requerida',
+        detail: 'Debes verificar tu cuenta antes de ver tus bloqueados.'
+      });
+      return;
+    }
+    this.bloqueadosModalVisible = true;
   }
 
   guardarCambios() {
@@ -161,6 +190,12 @@ export class ProfileComponent implements OnInit {
   filtrarSeguidos() {
     this.seguidosFiltrados = this.seguidosList.filter(seguido =>
       seguido.username.toLowerCase().includes(this.seguidosSearch.toLowerCase())
+    );
+  }
+
+  filtrarBloqueados() {
+    this.bloqueadosFiltrados = this.bloqueadosList.filter(bloqueado =>
+      bloqueado.username.toLowerCase().includes(this.bloqueadosSearch.toLowerCase())
     );
   }
 
