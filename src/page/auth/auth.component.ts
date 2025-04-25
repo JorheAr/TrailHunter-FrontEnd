@@ -61,6 +61,7 @@ export class AuthComponent {
         localStorage.setItem('username', response.nombre);
         localStorage.setItem("rol", response.rol);
         localStorage.setItem('hasLoggedIn', 'true');
+        localStorage.setItem('userId', response.id);
 
         console.log('Login successful:', response);
         this.messageService.add({
