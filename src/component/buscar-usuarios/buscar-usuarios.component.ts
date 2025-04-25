@@ -5,7 +5,9 @@ import { ButtonDirective } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SimpleChanges } from '@angular/core';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import {Toast} from 'primeng/toast';
 
 @Component({
   selector: 'app-buscar-usuarios',
@@ -16,9 +18,11 @@ import {RouterLink} from '@angular/router';
     ButtonDirective,
     PaginatorModule,
     ProgressSpinnerModule,
-    RouterLink
+    RouterLink,
+    Toast
   ],
-  templateUrl: './buscar-usuarios.component.html'
+  templateUrl: './buscar-usuarios.component.html',
+  providers: [MessageService]
 })
 export class BuscarUsuariosComponent implements OnInit, OnChanges {
   @Input() query: string = '';
@@ -35,7 +39,7 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
   totalRecords: number = 0;
   first: number = 0;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private messageService: MessageService) {}
 
   ngOnInit(): void {
     if (this.cache) {
@@ -70,7 +74,6 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
     });
   }
 
-
   filtrarResultados(): void {
     this.resultadosFiltrados = this.usuarios.filter((usuario) =>
       usuario.username.toLowerCase().includes(this.query.toLowerCase())
@@ -93,8 +96,20 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
 
   seguirUsuario(userId: number): void {
     this.actualizarEstadoSeguir(userId, true);
-    this.userService.followUser(userId).subscribe(() => {}, error => {
-      this.actualizarEstadoSeguir(userId, false);
+    this.userService.followUser(userId).subscribe({
+      next: () => {
+        // Aquí puedes agregar lógica si es necesario cuando se sigue con éxito
+      },
+      error: (error) => {
+        // Mostrar el error en un p-toast
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al seguir al usuario',
+          detail: error.error.message || 'No puedes seguir a este usuario porque te ha bloqueado o lo tienes bloqueado'
+        });
+
+        this.actualizarEstadoSeguir(userId, false);
+      }
     });
   }
 
