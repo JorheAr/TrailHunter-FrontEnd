@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {AuthComponent} from '../page/auth/auth.component';
 import {QuienesSomosComponent} from '../page/quienes-somos/quienes-somos';
+import {ContactoComponent} from '../page/contacto/contacto.component';
 import {HomeComponent} from '../page/home/home.component';
 import {AdminComponent} from '../page/admin/admin.component';
 import { adminRoleGuard } from './guards/admin-role.guard';
@@ -14,8 +15,11 @@ import {VerificarCorreoComponent} from '../page/verificar-correo/verificar-corre
 export const routes: Routes = [
   {'path': 'auth', 'component': AuthComponent},
   {'path': 'quienes-somos', 'component': QuienesSomosComponent},
+  {'path': 'contacto', 'component': ContactoComponent},
   {'path': 'home', 'component': HomeComponent},
   {'path': 'profile', 'component': ProfileComponent},
+
+
   {
     path: 'admin',
     component: AdminComponent,
