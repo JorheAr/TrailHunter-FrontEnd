@@ -86,7 +86,7 @@ export class UserViewComponent implements OnInit {
         this.userService.blockUser(this.usuario.id).subscribe({
           next: () => {
             Swal.fire('¡Hecho!', `${this.usuario.username} ha sido bloqueado.`, 'success');
-            this.usuario.is_blocked = true;
+            this.usuario.is_blocking = true;
           },
           error: () => {
             Swal.fire('Error', 'Hubo un problema al bloquear al usuario.', 'error');
@@ -111,7 +111,7 @@ export class UserViewComponent implements OnInit {
         this.userService.unblockUser(this.usuario.id).subscribe({
           next: () => {
             Swal.fire('¡Hecho!', `${this.usuario.username} ha sido desbloqueado.`, 'success');
-            this.usuario.is_blocked = false;
+            this.usuario.is_blocking = false;
           },
           error: () => {
             Swal.fire('Error', 'Hubo un problema al desbloquear al usuario.', 'error');
@@ -122,7 +122,7 @@ export class UserViewComponent implements OnInit {
   }
 
   isBlockedByUser(): boolean {
-    return this.usuario.blocked_by && this.usuario.blocked_by.includes(localStorage.getItem('userId'));
+    return !!this.usuario.is_blocked_by;
   }
 
   actualizarStats() {
