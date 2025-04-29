@@ -24,7 +24,6 @@ export class UserService {
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers });
   }
 
-
   getUsuarioActual(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
@@ -63,6 +62,13 @@ export class UserService {
     );
   }
 
+  getBlockedUsers(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.get<any>(`${this.apiUrl}/blocked`, { headers });
+  }
+
   getFollowers(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
@@ -89,6 +95,20 @@ export class UserService {
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
 
     return this.http.post<any>(`${this.apiUrl}/unfollow`, { user_id: userId }, { headers });
+  }
+
+  blockUser(userId: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.post<any>(`${this.apiUrl}/block`, { user_id: userId }, { headers });
+  }
+
+  unblockUser(userId: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+
+    return this.http.post<any>(`${this.apiUrl}/unblock`, { user_id: userId }, { headers });
   }
 
   actualizarPerfil(data: any): Observable<any> {

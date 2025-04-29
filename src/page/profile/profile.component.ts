@@ -9,11 +9,13 @@ import {Dialog} from 'primeng/dialog';
 import {InputText} from 'primeng/inputtext';
 import {Toast} from 'primeng/toast';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {ButtonDirective} from 'primeng/button';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText, Toast],
+  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText, Toast, ButtonDirective],
   templateUrl: './profile.component.html',
   providers: [MessageService]
 })
@@ -38,6 +40,12 @@ export class ProfileComponent implements OnInit {
   seguidosModalVisible: boolean = false;
   seguidoresSearch: string = '';
   seguidosSearch: string = '';
+
+  // Lista de bloqueados
+  bloqueadosList: any[] = [];
+  bloqueadosFiltrados: any[] = [];
+  bloqueadosModalVisible: boolean = false;
+  bloqueadosSearch: string = '';
 
   // Modal editar perfil
   editarPerfilModalVisible: boolean = false;
@@ -81,6 +89,16 @@ export class ProfileComponent implements OnInit {
         this.editarPerfilWidth = '40vw';
       }
     });
+
+    this.userService.getBlockedUsers().subscribe({
+      next: (data) => {
+        this.bloqueadosList = data.bloqueados;
+        this.bloqueadosFiltrados = [...this.bloqueadosList];
+      },
+      error: (err) => {
+        console.error('Error al obtener bloqueados', err);
+      }
+    });
   }
 
   abrirEditarPerfil() {
@@ -94,6 +112,60 @@ export class ProfileComponent implements OnInit {
     }
     this.usernameEdit = this.username;
     this.editarPerfilModalVisible = true;
+  }
+
+  abrirGetBloqueados() {
+    if (!this.verificado) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Verificación requerida',
+        detail: 'Debes verificar tu cuenta antes de ver tus bloqueados.'
+      });
+      return;
+    }
+    this.bloqueadosModalVisible = true;
+  }
+
+  desbloquearUsuario(usuarioId: number): void {
+    this.userService.unblockUser(usuarioId).subscribe({
+      next: () => {
+        const index = this.bloqueadosFiltrados.findIndex(u => u.id === usuarioId);
+        const username = this.bloqueadosFiltrados[index].username;
+
+        // Cerrar el modal de bloqueados
+        this.bloqueadosModalVisible = false;
+
+        // Mostrar SweetAlert con z-index alto
+        Swal.fire({
+          title: '¡Hecho!',
+          text: `Has desbloqueado a ${username} satisfactoriamente.`,
+          icon: 'success',
+          customClass: {
+            popup: 'popup-custom'
+          },
+          willOpen: () => {
+            // Asegurarse de que el popup de SweetAlert tenga un z-index mayor
+            const popup = document.querySelector('.swal2-popup');
+            if (popup) {
+              (popup as HTMLElement).style.zIndex = '9999';  // Aseguramos que tenga un z-index mayor
+            }
+          },
+          // Al cerrarse el SweetAlert, vuelve a abrir el modal de bloqueados
+          didClose: () => {
+            this.abrirGetBloqueados();  // Abrir el modal de bloqueados nuevamente
+          }
+        });
+
+        // Eliminar al usuario de la lista de bloqueados
+        if (index > -1) {
+          this.bloqueadosFiltrados.splice(index, 1);
+        }
+      },
+      error: (err) => {
+        // Mostrar mensaje de error con SweetAlert
+        Swal.fire('Error', 'Hubo un problema al desbloquear al usuario.', 'error');
+      }
+    });
   }
 
   guardarCambios() {
@@ -161,6 +233,12 @@ export class ProfileComponent implements OnInit {
   filtrarSeguidos() {
     this.seguidosFiltrados = this.seguidosList.filter(seguido =>
       seguido.username.toLowerCase().includes(this.seguidosSearch.toLowerCase())
+    );
+  }
+
+  filtrarBloqueados() {
+    this.bloqueadosFiltrados = this.bloqueadosList.filter(bloqueado =>
+      bloqueado.username.toLowerCase().includes(this.bloqueadosSearch.toLowerCase())
     );
   }
 

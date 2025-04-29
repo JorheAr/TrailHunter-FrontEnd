@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService} from '../../services/user.service';
 import {NgClass, NgIf} from '@angular/common';
 import {LoaderComponent} from '../../component/loader/loader.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-view',
@@ -68,6 +69,60 @@ export class UserViewComponent implements OnInit {
       this.usuario.is_following = false;
       this.actualizarStats();
     });
+  }
+
+  bloquearUsuario(): void {
+    if (!this.usuario) return;
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Seguro que quieres bloquear a ${this.usuario.username}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, bloquear',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.blockUser(this.usuario.id).subscribe({
+          next: () => {
+            Swal.fire('¡Hecho!', `${this.usuario.username} ha sido bloqueado.`, 'success');
+            this.usuario.is_blocking = true;
+          },
+          error: () => {
+            Swal.fire('Error', 'Hubo un problema al bloquear al usuario.', 'error');
+          },
+        });
+      }
+    });
+  }
+
+  desbloquearUsuario(): void {
+    if (!this.usuario) return;
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Seguro que quieres desbloquear a ${this.usuario.username}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, desbloquear',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.unblockUser(this.usuario.id).subscribe({
+          next: () => {
+            Swal.fire('¡Hecho!', `${this.usuario.username} ha sido desbloqueado.`, 'success');
+            this.usuario.is_blocking = false;
+          },
+          error: () => {
+            Swal.fire('Error', 'Hubo un problema al desbloquear al usuario.', 'error');
+          },
+        });
+      }
+    });
+  }
+
+  isBlockedByUser(): boolean {
+    return !!this.usuario.is_blocked_by;
   }
 
   actualizarStats() {

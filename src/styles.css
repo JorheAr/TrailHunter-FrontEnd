@@ -10,3 +10,11 @@
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
+.swal2-popup {
+  z-index: 9999 !important;
+}
+
+.p-dialog {
+  z-index: 999; /* Ajusta este valor si es necesario */
+}

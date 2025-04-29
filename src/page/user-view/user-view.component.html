@@ -1,10 +1,12 @@
 <div class="bg-white h-full w-full p-5 flex flex-col items-center justify-start">
   <app-loader *ngIf="cargando"></app-loader>
 
-  <div class="flex flex-col gap-6 w-2/3" *ngIf="!cargando && usuario">
-    <!-- Info principal -->
-    <div class="flex items-center gap-10">
-      <div class="flex justify-center items-center">
+  <!-- Siempre se muestra la información principal del usuario -->
+  <div class="flex flex-col gap-6 md:w-2/3 mx-auto w-full" *ngIf="!cargando && usuario">
+    <!-- Info principal (siempre visible, sin importar si está bloqueado o te bloquea) -->
+    <div class="flex flex-col md:flex-row items-center gap-10">
+      <!-- Avatar de Usuario -->
+      <div class="flex justify-center items-center mb-4 md:mb-0">
         <img
           [src]="avatarUrl"
           class="w-34 h-34 rounded-full border-4 border-gray-300"
@@ -12,45 +14,80 @@
         />
       </div>
 
-      <div class="flex flex-col items-center gap-4">
+      <!-- Nombre + Estadísticas -->
+      <div class="flex flex-col items-center gap-4 text-center">
         <!-- Nombre del usuario -->
-        <h2 class="text-2xl w-full font-bold text-gray-800" *ngIf="usuario">{{ usuario.username }}</h2>
+        <h2 class="text-2xl md:text-xl sm:text-start w-full font-bold text-gray-800">{{ usuario.username }}</h2>
 
-        <!-- Estadísticas -->
+        <!-- Estadísticas centradas -->
         <div class="flex gap-10">
           <div class="flex flex-col items-center gap-2">
-            <label class="text-xl">Seguidores</label>
-            <label class="text-3xl font-semibold">{{ seguidores }}</label>
+            <label class="text-sm sm:text-xl">Seguidores</label>
+            <label class="text-xl sm:text-3xl font-semibold">{{ seguidores }}</label>
           </div>
           <div class="flex flex-col items-center gap-2">
-            <label class="text-xl">Seguidos</label>
-            <label class="text-3xl font-semibold">{{ seguidos }}</label>
+            <label class="text-sm sm:text-xl">Seguidos</label>
+            <label class="text-xl sm:text-3xl font-semibold">{{ seguidos }}</label>
           </div>
           <div class="flex flex-col items-center gap-2">
-            <label class="text-xl">Publicaciones</label>
-            <label class="text-3xl font-semibold">0</label>
+            <label class="text-sm sm:text-xl">Publicaciones</label>
+            <label class="text-xl sm:text-3xl font-semibold">0</label>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Botón seguir/dejar de seguir -->
-    <div
-      *ngIf="usuario"
-      class="rounded-lg bg-gray-100 p-2 flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition self-start"
-      (click)="usuario.is_following ? dejarDeSeguirUsuario() : seguirUsuario()"
-    >
-      <i class="pi" [ngClass]="usuario.is_following ? 'pi-user-minus' : 'pi-user-plus'"></i>
-      <label class="text-gray-800 font-medium">
-        {{ usuario.is_following ? 'Dejar de seguir' : 'Seguir' }}
+    <!-- Mostrar los botones de "Seguir/Dejar de seguir" y "Bloquear/Desbloquear" siempre -->
+    <div class="flex flex-col gap-3">
+      <div
+        class="rounded-lg bg-gray-100 p-2 justify-center flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition self-start w-full sm:w-[240px]"
+        (click)="usuario.is_following ? dejarDeSeguirUsuario() : seguirUsuario()">
+        <i class="pi" [ngClass]="usuario.is_following ? 'pi-user-minus' : 'pi-user-plus'"></i>
+        <label class="text-gray-800 font-medium">
+          {{ usuario.is_following ? 'Dejar de seguir' : 'Seguir' }}
+        </label>
+      </div>
+
+      <!-- Botón bloquear/desbloquear -->
+      <div
+        *ngIf="!usuario.is_blocked_by"
+      class="rounded-lg p-2 justify-center flex items-center gap-3 cursor-pointer transition self-start w-full sm:w-[240px]"
+      [ngClass]=" usuario.is_blocking ? 'bg-green-100 hover:bg-green-200' : 'bg-red-100 hover:bg-red-200' "
+      (click)=" usuario.is_blocking ? desbloquearUsuario() : bloquearUsuario()">
+      <i class="pi" [ngClass]="usuario.is_blocking ? 'pi-lock-open text-green-600' : 'pi-ban text-red-600'"></i>
+      <label class="font-medium" [ngClass]="usuario.is_blocking ? 'text-green-700' : 'text-red-700'">
+        {{ usuario.is_blocking ? 'Desbloquear usuario' : 'Bloquear usuario' }}
       </label>
     </div>
+  </div>
 
-    <div class="flex p-2 border-b-1 border-gray-200">
-      <h1 class="text-2xl font-semibold">Publicaciones</h1>
+    <!-- Si yo bloqueo al otro (is_blocking) -->
+    <div *ngIf="usuario.is_blocking">
+      <div class="flex p-2 pt-5">
+        <h1 class="text-xl font-semibold text-center sm:text-start">
+          No se puede mostrar la información de este perfil porque lo has bloqueado.
+        </h1>
+      </div>
     </div>
 
-    <div class="flex p-2 border-b-1 border-gray-200">
+    <!-- Si me bloquea a mí (is_blocked_by) -->
+    <div *ngIf="usuario.is_blocked_by">
+      <div class="flex p-2 pt-5">
+        <h1 class="text-xl font-semibold text-center sm:text-start">
+          No se puede mostrar la información de este perfil porque te ha bloqueado.
+        </h1>
+      </div>
+    </div>
+
+    <!-- Si no estoy bloqueado y no bloqueo a nadie -->
+    <div
+      class="flex p-2 border-b-1 border-gray-200 md:w-full"
+      *ngIf="!usuario.is_blocking && !usuario.is_blocked_by">
+      <h1 class="text-2xl font-semibold">Publicaciones</h1>
+    </div>
+    <div
+      class="flex p-2 border-b-1 border-gray-200 md:w-full"
+      *ngIf="!usuario.is_blocking && !usuario.is_blocked_by">
       <h1 class="text-2xl font-semibold">Actividades</h1>
     </div>
   </div>
