@@ -1,0 +1,54 @@
+<div class="w-full flex h-full flex-col bg-gray-100 pb-10 -mt-10 lg:mt-0">
+  <div class="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl mb-10 pb-10">
+    <h1 class="text-5xl font-extrabold text-green-700 mb-10">Nuestras actividades programadas
+      <img src="/Emojicaza.png" alt="Actividades" class="w-16 h-16 inline-block ml-4"/>
+    </h1>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+      En nuestra comunidad, las actividades programadas no solo son eventos para compartir y aprender, sino compromisos que asumimos con responsabilidad. Cada actividad requiere una planificación cuidadosa, recursos y un equipo dedicado a garantizar la seguridad y el bienestar de todos los participantes.
+    </p>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+      Si decides apuntarte a alguna de nuestras actividades, recuerda que tu asistencia es fundamental. Al confirmar tu participación, te comprometes a respetar los horarios, seguir las instrucciones de los organizadores y contribuir al desarrollo armonioso del evento. Tu presencia cuenta y es clave para el éxito de nuestras actividades.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
+      <div *ngFor="let actividad of actividades" class="bg-gray-50 p-6 rounded-lg shadow-lg flex flex-col justify-between">
+        <div>
+          <img [src]="actividad.imagen" [alt]="actividad.titulo" class="w-full h-48 object-cover mb-4 rounded-lg"/>
+          <h2 class="text-xl font-semibold text-green-700 mb-2">{{ actividad.titulo }}</h2>
+          <p class="text-gray-700 mb-2">{{ actividad.descripcion }}</p>
+          <p class="text-gray-500 mb-1">Fecha: {{ actividad.fecha }}</p>
+          <p class="text-gray-500 mb-1">Lugar: {{ actividad.lugar }}</p>
+          <p class="text-gray-500 mb-4">Capacidad: {{ actividad.capacidad }}</p>
+        </div>
+        <div class="mt-auto">
+          <button class="bg-green-700 text-white py-2 px-4 rounded-lg w-full mt-4 hover:bg-green-800 transition duration-300"
+                  (click)="inscribirse(actividad)">Apuntarse</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <button class="bg-green-700 text-white py-2 px-6 rounded-lg hover:bg-green-800 transition duration-300"
+              (click)="openNuevaActividad()">Sugerir Nueva Actividad</button>
+    </div>
+
+    <!-- Renderiza el componente de nueva actividad -->
+    <app-nueva-actividad *ngIf="isNuevaActividadOpen" (closeForm)="closeNuevaActividad()"></app-nueva-actividad>
+
+    <div class="bg-gray-50 p-8 rounded-xl mt-10 shadow-lg">
+      <h2 class="text-2xl font-bold text-green-700 mb-4">Compromiso y Responsabilidad en los Eventos</h2>
+      <p class="text-gray-600 mb-6">
+        Asistir a un evento programado implica no solo disfrutar de una actividad, sino también respetar el esfuerzo organizativo que hay detrás. Al inscribirte, asumes el compromiso de asistir y participar activamente, respetando las normas y horarios establecidos.
+      </p>
+      <p class="text-gray-600 mb-6">
+        Cada evento es una oportunidad para aprender, conectarse con otros cazadores responsables y reforzar el sentido de comunidad. Asegúrate de notificar con antelación si no puedes asistir, permitiendo así a otros participantes ocupar tu lugar y aprovechar la actividad.
+      </p>
+      <p class="text-gray-600">
+        Gracias por ser parte de nuestra comunidad comprometida. Juntos, hacemos de cada evento una experiencia enriquecedora y segura para todos.
+      </p>
+    </div>
+
+  </div>
+</div>
