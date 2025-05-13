@@ -1,1 +1,76 @@
-<p>usuarios works!</p>
+<!-- Buscador -->
+<div class="mb-4 p-5">
+  <input
+    type="text"
+    pInputText
+    placeholder="Buscar..."
+    class="w-full p-2 border border-gray-300 rounded"
+    [(ngModel)]="filtroGlobal"
+    (input)="aplicarFiltroGlobal($event)"
+  />
+</div>
+
+<!-- Contenedor de la tabla con scroll restringido -->
+<div style="max-height: calc(100vh - 200px); overflow-y: auto; position: relative;">
+  <!-- Spinner de carga -->
+  <p-progressSpinner *ngIf="isLoading" [ngStyle]="{ 'position': 'absolute', 'top': '50%', 'left': '50%', 'transform': 'translate(-50%, -50%)' }"></p-progressSpinner>
+
+  <!-- Tabla -->
+  <p-table
+    #dt
+    [value]="usuarios"
+    [scrollable]="true"
+    scrollHeight="100%"
+    [globalFilterFields]="['cliente.nombre', 'cliente.apellidos', 'username', 'email', 'rol']"
+    class="p-datatable-sm"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Verificado</th>
+        <th>Fecha Registro</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-usuario>
+      <tr>
+        <td>{{ usuario.cliente?.nombre }}</td>
+        <td>{{ usuario.cliente?.apellidos }}</td>
+        <td>
+          <span class="block max-w-[150px] truncate" [title]="usuario.username">
+            {{ usuario.username }}
+          </span>
+        </td>
+        <td>
+          <span class="block max-w-[200px] truncate" [title]="usuario.email">
+            {{ usuario.email }}
+          </span>
+        </td>
+        <td>{{ usuario.rol }}</td>
+        <td class="flex justify-center">
+          <span
+            class="inline-block w-14 text-center px-2 py-1 rounded font-semibold"
+            [ngClass]="usuario.verificado ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'"
+          >
+            {{ usuario.verificado ? 'Sí' : 'No' }}
+          </span>
+        </td>
+        <td>{{ usuario.fecha_registro | date: 'mediumDate' }}</td>
+        <td class="flex justify-center">
+          <button
+            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow"
+            (click)="eliminarUsuario(usuario.id)"
+          >
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-toast></p-toast>
