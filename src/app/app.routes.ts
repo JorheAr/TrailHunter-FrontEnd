@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {AuthComponent} from '../page/auth/auth.component';
 import {QuienesSomosComponent} from '../page/quienes-somos/quienes-somos';
+import {ContactoComponent} from '../page/contacto/contacto.component';
 import {HomeComponent} from '../page/home/home.component';
 import {AdminComponent} from '../page/admin/admin.component';
 import { adminRoleGuard } from './guards/admin-role.guard';
@@ -11,14 +12,19 @@ import {ProfileComponent} from '../page/profile/profile.component';
 import {VerificarCorreoComponent} from '../page/verificar-correo/verificar-correo.component';
 import {ExplorarComponent} from '../page/explorar/explorar.component';
 import {UserViewComponent} from '../page/user-view/user-view.component';
+import {ActividadesComponent} from '../page/actividades/actividades.component';
+import {NuevaActividadComponent} from '../component/nueva-actividad/nueva-actividad.component';
 
 
 export const routes: Routes = [
   {'path': 'auth', 'component': AuthComponent},
   {'path': 'quienes-somos', 'component': QuienesSomosComponent},
+  {'path': 'contacto', 'component': ContactoComponent},
   {'path': 'home', 'component': HomeComponent},
   {'path': 'profile', 'component': ProfileComponent},
   {'path': 'explorar', 'component': ExplorarComponent},
+  {'path': 'nueva-actividad', 'component': NuevaActividadComponent},
+  {'path': 'actividades', 'component': ActividadesComponent},
   { path: 'usuario/:id', 'component': UserViewComponent },
   {
     path: 'admin',
