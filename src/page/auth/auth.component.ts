@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
   templateUrl: './auth.component.html',
   providers: [MessageService]
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
   private messageService = inject(MessageService);
   private router = inject(Router);
@@ -41,6 +41,13 @@ export class AuthComponent {
     lastName: '',
     birthDate: null
   };
+
+  ngOnInit() {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername !== null) {
+      this.router.navigate(['/home']);
+    }
+  }
 
   onLogin() {
     // Validaciones básicas
@@ -69,7 +76,9 @@ export class AuthComponent {
           summary: 'Bienvenido',
           detail: 'Inicio de sesión exitoso'
         });
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home']).then(() => {
+          window.location.reload();
+        });
       },
       error: (error: HttpErrorResponse) => {
         const msg = error.error?.message || 'A ocurrido un error';

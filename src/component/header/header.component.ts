@@ -1,8 +1,9 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
 import { Router } from '@angular/router';
 import {MenuModule} from 'primeng/menu';
 import {ButtonModule} from 'primeng/button';
+import {observeNotification} from 'rxjs/internal/Notification';
 
 @Component({
   selector: 'app-header',
@@ -15,25 +16,43 @@ import {ButtonModule} from 'primeng/button';
   templateUrl: './header.component.html',
   standalone: true
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   private router = inject(Router);
   isMenuOpen = false;
-  userItems = [
-    {
-      label: 'Mi Perfil',
-      icon: 'pi pi-id-card',
-      command: () => {
-        this.router.navigate(['/profile']);
+  userItems: any[] = [];
+
+  ngOnInit() {
+    this.updateUserItems();
+  }
+
+  updateUserItems() {
+    this.userItems = [
+      {
+        label: 'Mi Perfil',
+        icon: 'pi pi-id-card',
+        command: () => {
+          this.router.navigate(['/profile']);
+        }
+      },
+      {
+        label: 'Cerrar sesión',
+        icon: 'pi pi-sign-out',
+        command: () => {
+          this.logout();
+        }
       }
-    },
-    {
-      label: 'Cerrar sesión',
-      icon: 'pi pi-sign-out',
-      command: () => {
-        this.logout();
-      }
+    ];
+
+    if (localStorage.getItem('rol') === 'admin') {
+      this.userItems.push({
+        label: 'Panel de Administración',
+        icon: 'pi pi-cog',
+        command: () => {
+          this.router.navigate(['/admin']);
+        }
+      });
     }
-  ];
+  }
 
 
   // Método para alternar el estado del menú

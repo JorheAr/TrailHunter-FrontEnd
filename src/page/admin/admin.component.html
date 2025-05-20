@@ -1,4 +1,4 @@
-<div class="flex min-h-screen">
+<div class="flex min-h-screen overflow-hidden">
   <!-- Sidebar -->
   <aside class="w-64 bg-gray-800 text-white p-6">
     <h2 class="text-2xl font-bold mb-6">Admin</h2>
@@ -16,7 +16,7 @@
   </aside>
 
   <!-- Main Content -->
-  <main class="flex-1 p-6 bg-gray-100">
+  <main class="flex-1 bg-gray-100 overflow-y-auto max-h-screen">
     <router-outlet></router-outlet>
   </main>
 </div>

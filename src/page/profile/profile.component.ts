@@ -144,15 +144,13 @@ export class ProfileComponent implements OnInit {
             popup: 'popup-custom'
           },
           willOpen: () => {
-            // Asegurarse de que el popup de SweetAlert tenga un z-index mayor
             const popup = document.querySelector('.swal2-popup');
             if (popup) {
-              (popup as HTMLElement).style.zIndex = '9999';  // Aseguramos que tenga un z-index mayor
+              (popup as HTMLElement).style.zIndex = '9999';
             }
           },
-          // Al cerrarse el SweetAlert, vuelve a abrir el modal de bloqueados
           didClose: () => {
-            this.abrirGetBloqueados();  // Abrir el modal de bloqueados nuevamente
+            this.abrirGetBloqueados();
           }
         });
 

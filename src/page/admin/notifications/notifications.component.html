@@ -1,1 +1,37 @@
-<p>notifications works!</p>
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Mensajes de contacto</h2>
+    <div class="card flex justify-center">
+      <p-selectButton
+        [options]="filtroOpciones"
+        [(ngModel)]="filtroSeleccionado"
+        optionLabel="name"
+        optionValue="value"
+        (onChange)="aplicarFiltro()">
+      </p-selectButton>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-gray-600">Cargando mensajes...</div>
+  <div *ngIf="error" class="text-red-600">{{ error }}</div>
+
+  <div *ngIf="!cargando && mensajesFiltrados.length === 0" class="text-gray-600">
+    No hay mensajes.
+  </div>
+
+  <div *ngIf="mensajesFiltrados.length > 0" [ngClass]="{'max-h-96 overflow-y-auto': mensajesFiltrados.length > 5}" class="space-y-4">
+    <ul>
+      <li *ngFor="let mensaje of mensajesFiltrados" class="bg-white shadow p-4 rounded-md">
+        <p class="text-sm text-gray-500">{{ mensaje.fecha_envio }}</p>
+        <p><strong>Nombre:</strong> {{ mensaje.nombre }}</p>
+        <p><strong>Correo:</strong> {{ mensaje.correo }}</p>
+        <p><strong>Mensaje:</strong></p>
+        <p class="whitespace-pre-line">{{ mensaje.mensaje }}</p>
+        <p><strong>Estado:</strong> {{ mensaje.leido ? 'Leído' : 'No leído' }}</p>
+        <button *ngIf="!mensaje.leido" (click)="marcarComoLeido(mensaje)" class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+          Marcar como leído
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
