@@ -1,6 +1,6 @@
 <!-- contacto.component.html -->
-<div class="w-full flex h-full flex-col bg-gray-100 pb-10">
-  <div class="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl mb-10 pb-10">
+<div class="w-full flex h-full flex-col bg-white pb-10">
+  <div class="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl mb-10 pb-10">
 
     <!-- Encabezado y descripción -->
     <div class="text-center mb-12">
@@ -15,24 +15,52 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
       <!-- Formulario -->
       <div>
-        <form class="space-y-6">
+        <form class="space-y-6" (ngSubmit)="enviarFormulario()" #formContacto="ngForm">
           <div>
             <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-            <input type="text" id="nombre" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500" required>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="nombre"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500"
+            >
           </div>
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-            <input type="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500" required>
+            <input
+              type="email"
+              id="email"
+              name="correo"
+              [(ngModel)]="correo"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500"
+            >
           </div>
           <div>
             <label for="mensaje" class="block text-sm font-medium text-gray-700">Mensaje</label>
-            <textarea id="mensaje" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500" required></textarea>
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              [(ngModel)]="mensaje"
+              rows="5"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500"
+            ></textarea>
           </div>
-          <button type="submit" class="bg-green-700 text-white px-6 py-2 rounded-md hover:bg-green-800 transition">
+          <button
+            type="submit"
+            class="bg-green-700 text-white px-6 py-2 rounded-md hover:bg-green-800 transition"
+          >
             Enviar
           </button>
+
+          <p *ngIf="enviado" class="text-green-600">Mensaje enviado con éxito.</p>
+          <p *ngIf="error" class="text-red-600">{{ error }}</p>
         </form>
       </div>
+
 
       <!-- Información de contacto -->
       <div class="space-y-6">
