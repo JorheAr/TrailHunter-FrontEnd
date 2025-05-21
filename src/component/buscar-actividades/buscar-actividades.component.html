@@ -1,6 +1,41 @@
-<div class="space-y-2">
+<div class="space-y-4">
   <p *ngIf="query">Resultados para "{{ query }}":</p>
-  <ul class="list-disc ml-4">
-    <li *ngFor="let actividad of resultadosFiltrados">{{ actividad.titulo }}</li>
-  </ul>
+
+  <p-progressSpinner *ngIf="loading" styleClass="block mx-auto"></p-progressSpinner>
+
+  <div *ngIf="!loading && resultadosFiltrados.length === 0">
+    <p>No se encontraron actividades.</p>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" *ngIf="!loading && resultadosFiltrados.length > 0">
+    <p-card *ngFor="let actividad of resultadosFiltrados" [style]="{'cursor':'pointer'}" [routerLink]="['/actividad', actividad.id]">
+      <ng-template pTemplate="header">
+        <img
+          *ngIf="actividad.imagen_url"
+          [src]="actividad.imagen_url"
+          alt="Imagen de la actividad"
+          class="w-full h-48 object-cover rounded-t"
+        />
+        <div *ngIf="!actividad.imagen_url" class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+          Sin imagen
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="content">
+        <h2 class="text-lg font-semibold mb-2 overflow-hidden text-ellipsis whitespace-nowrap">
+          {{ actividad.titulo }}
+        </h2>
+        <p class="text-sm text-gray-600">Fecha: {{ actividad.fecha | date: 'mediumDate' }}</p>
+      </ng-template>
+    </p-card>
+  </div>
+
+  <p-paginator
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [first]="page * rows"
+    (onPageChange)="onPageChange($event)"
+    *ngIf="!loading && totalRecords > rows"
+    styleClass="mt-4"
+  ></p-paginator>
 </div>
