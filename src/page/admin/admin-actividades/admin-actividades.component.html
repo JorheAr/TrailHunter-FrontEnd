@@ -1,0 +1,200 @@
+<!-- Buscador -->
+<div class="mb-4 p-5">
+  <input
+    type="text"
+    pInputText
+    placeholder="Buscar actividades..."
+    class="w-full p-2 border border-gray-300 rounded"
+    [(ngModel)]="filtroGlobal"
+    (input)="aplicarFiltroGlobal()"
+  />
+</div>
+
+<!-- Contenedor scroll con spinner -->
+<div style="max-height: calc(100vh - 200px); overflow-y: auto; position: relative;">
+  <p-progressSpinner
+    *ngIf="loading"
+    [ngStyle]="{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)'
+    }"
+  ></p-progressSpinner>
+
+  <p-table
+    #dt
+    [value]="actividades"
+    [scrollable]="true"
+    scrollHeight="100%"
+    [globalFilterFields]="['titulo', 'fecha']"
+    [paginator]="false"
+    class="p-datatable-sm"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Fecha</th>
+        <th>Inscritos</th>
+        <th>Cupo máximo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-actividad>
+      <tr>
+        <td>
+          <img
+            [src]="actividad.imagen_url"
+            alt="imagen"
+            width="100"
+            style="border-radius: 8px;"
+          />
+        </td>
+        <td>{{ actividad.titulo }}</td>
+        <td>{{ actividad.fecha }}</td>
+        <td>{{ actividad.inscritos }}</td>
+        <td>{{ actividad.cupo_maximo }}</td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-search"
+            class="p-button-rounded p-button-info"
+            (click)="verDetalle(actividad.id)"
+            title="Ver detalle"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Botón flotante Crear Actividad -->
+<button
+  pButton
+  icon="pi pi-plus"
+  label="Crear Actividad"
+  class="p-button-rounded p-button-success"
+  style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;"
+  (click)="abrirModal()"
+></button>
+
+<!-- Modal Crear Actividad con PrimeNG -->
+<div
+  *ngIf="mostrarModal"
+  class="fixed inset-0 flex justify-center items-center p-4"
+  style="background: rgba(255, 255, 255, 0.9); z-index: 1100;"
+>
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg">
+    <div class="flex items-center mb-6">
+      <img src="/trailhunter-logo.png" alt="Logo" class="h-12 w-12 mr-4" />
+      <h2 class="text-3xl font-semibold text-green-800">Nueva Actividad</h2>
+    </div>
+
+    <form (ngSubmit)="handleSubmit()" #form="ngForm" class="space-y-5">
+
+      <div class="field">
+        <label for="titulo" class="block mb-2 font-medium">Título</label>
+        <input
+          id="titulo"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.titulo"
+          name="titulo"
+          required
+          #titulo="ngModel"
+          class="w-full"
+        />
+        <div *ngIf="titulo.invalid && titulo.touched" class="text-red-600">
+          El título es requerido.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="descripcion" class="block mb-2 font-medium">Descripción</label>
+        <textarea
+          id="descripcion"
+          pInputTextarea
+          [(ngModel)]="formData.descripcion"
+          name="descripcion"
+          required
+          #descripcion="ngModel"
+          rows="4"
+          class="w-full"
+        ></textarea>
+        <div *ngIf="descripcion.invalid && descripcion.touched" class="text-red-600">
+          La descripción es requerida.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fecha" class="block mb-2 font-medium">Fecha</label>
+        <p-calendar
+          id="fecha"
+          styleClass="w-full"
+          [(ngModel)]="formData.fecha"
+          name="fecha"
+          [showIcon]="true"
+          dateFormat="yy-mm-dd"
+          required
+          #fecha="ngModel"
+        ></p-calendar>
+
+        <div *ngIf="fecha.invalid && fecha.touched" class="text-red-600 w-full" style="width: 100%">
+          La fecha es requerida.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cupo_maximo" class="block mb-2 font-medium">Cupo máximo</label>
+        <p-inputNumber
+          id="cupo_maximo"
+          [(ngModel)]="formData.cupo_maximo"
+          name="cupo_maximo"
+          [min]="1"
+          required
+          #cupo_maximo="ngModel"
+          class="w-full"
+        ></p-inputNumber>
+        <div *ngIf="cupo_maximo.invalid && cupo_maximo.touched" class="text-red-600">
+          El cupo máximo es requerido y debe ser mayor que 0.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="imagen_url" class="block mb-2 font-medium">Imagen URL (opcional)</label>
+        <input
+          id="imagen_url"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.imagen_url"
+          name="imagen_url"
+          class="w-full"
+        />
+      </div>
+
+      <div class="flex justify-end mt-6 gap-4">
+        <button
+          pButton
+          type="submit"
+          label="Enviar"
+          class="p-button-success"
+          [disabled]="form.invalid || loadingCrear"
+          [loading]="loadingCrear"
+        ></button>
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          class="p-button-danger"
+          (click)="cerrarModal()"
+          [disabled]="loadingCrear"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<p-toast></p-toast>
