@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,66 +10,63 @@ export class CaceriaService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todas las actividades de cacería (públicas)
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
+  }
+
+  // Obtener actividades públicas
   obtenerTodas(): Observable<any> {
     return this.http.get(`${this.baseUrl}/todas`);
   }
 
-  // Obtener actividades en las que está inscrito el usuario
+  // Obtener actividades del usuario autenticado
   obtenerMisActividades(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
-
-    return this.http.get(`${this.baseUrl}/mis`, { headers });
+    return this.http.get(`${this.baseUrl}/mis`, { headers: this.getAuthHeaders() });
   }
 
-  // Inscribirse a una actividad
+  // Inscribirse en una actividad
   inscribirse(actividadId: number): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
-
     return this.http.post(
       `${this.baseUrl}/inscribirse`,
       { actividad_id: actividadId },
-      { headers }
+      { headers: this.getAuthHeaders() }
     );
   }
 
-  // Quitar inscripción de una actividad
+  // Desinscribirse de una actividad
   desinscribirse(actividadId: number): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
-
     return this.http.post(
       `${this.baseUrl}/desinscribirse`,
       { actividad_id: actividadId },
-      { headers }
+      { headers: this.getAuthHeaders() }
     );
   }
 
   // Valorar una actividad
   valorarActividad(actividadId: number, puntuacion: number, comentario: string = ''): Observable<any> {
-    return this.http.post(`${this.baseUrl}/valorar`, {
-      actividad_id: actividadId,
-      puntuacion: puntuacion,
-      comentario: comentario
-    });
+    return this.http.post(
+      `${this.baseUrl}/valorar`,
+      { actividad_id: actividadId, puntuacion, comentario },
+      { headers: this.getAuthHeaders() }
+    );
   }
 
-  // Crear una nueva actividad (solo para admin)
+  // Crear Actividad
   crearActividad(data: any): Observable<any> {
     const body = {
-      nombre: data.nombre,
+      titulo: data.titulo,
       descripcion: data.descripcion,
       fecha: this.formatDateTime(data.fecha),
-      limite_participantes: data.limite_participantes,
+      cupo_maximo: data.cupo_maximo,
       imagen_url: data.imagen_url || null
     };
-    return this.http.post(`${this.baseUrl}/crear`, body);
+    return this.http.post(`${this.baseUrl}/crear`, body, { headers: this.getAuthHeaders() });
   }
 
-  // Utilidad para convertir fecha a formato compatible con el backend
-  private formatDateTime(date: Date): string {
-    return date.toISOString(); // YYYY-MM-DDTHH:mm:ss.sssZ
+
+  // Utilidad para formatear fecha ISO
+  formatDateTime(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 }

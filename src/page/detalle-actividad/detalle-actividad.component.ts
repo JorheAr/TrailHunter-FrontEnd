@@ -117,17 +117,15 @@ export class DetalleActividadComponent implements OnInit {
     });
   }
 
-  // NUEVO: Manejar envío del comentario
   enviarComentario(event: Event) {
     event.preventDefault();
     if (!this.nuevoComentario.trim()) return;
 
     this.enviandoComentario = true;
 
-    // Simulación de envío al backend con delay (puedes cambiarlo por llamada real)
     setTimeout(() => {
       this.comentarios.push({
-        autor: 'Usuario Actual', // O toma el nombre del usuario logueado
+        autor: 'Usuario Actual',
         texto: this.nuevoComentario.trim(),
         fecha: 'Hace unos segundos'
       });

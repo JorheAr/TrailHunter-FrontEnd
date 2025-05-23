@@ -36,6 +36,7 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('../page/admin/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'usuarios', loadComponent: () => import('../page/admin/usuarios/usuarios.component').then(m => m.UsuariosComponent) },
       { path: 'notificaciones', loadComponent: () => import('../page/admin/notifications/notifications.component').then(m => m.NotificationsComponent) },
+      { path: 'admin-actividades', loadComponent: () => import('../page/admin/admin-actividades/admin-actividades.component').then(m => m.AdminActividadesComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },
