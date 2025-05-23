@@ -1,0 +1,24 @@
+<div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center p-4">
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg">
+    <div class="flex items-center mb-6">
+      <img src="/trailhunter-logo.png" alt="Logo" class="h-12 w-12 mr-4">
+      <h2 class="text-3xl font-semibold text-blue-800">Nuevo Grupo</h2>
+    </div>
+
+    <form (ngSubmit)="handleSubmit()" #grupoForm="ngForm" class="space-y-5">
+      <input type="text" placeholder="Nombre del Grupo" [(ngModel)]="nombre" name="nombre"
+             class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700" required />
+
+      <textarea placeholder="Descripción" [(ngModel)]="descripcion" name="descripcion"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700" required></textarea>
+
+      <input type="text" placeholder="Imagen (opcional)" [(ngModel)]="imagen" name="imagen"
+             class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700" />
+
+      <div class="flex justify-end mt-6 gap-4">
+        <button type="submit" class="bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition">Enviar</button>
+        <button type="button" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition" (click)="closeFormHandler()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

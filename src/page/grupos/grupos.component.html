@@ -1,0 +1,124 @@
+<div class="w-full flex h-full flex-col bg-gray-100 pb-10 -mt-10 lg:mt-0">
+  <div class="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl mb-10 pb-10">
+    <h1 class="text-5xl font-extrabold text-green-700 mb-6 text-center">
+      Nuestros Grupos de Caza
+<!--      <img src="/Emojicaza.png" alt="Grupos" class="w-16 h-16 inline-block ml-4"/>-->
+    </h1>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+      En nuestra comunidad, los grupos representan hermandades de cazadores con valores y objetivos comunes. Al unirte a uno, no solo accedes a nuevas experiencias, sino que formas parte de una historia compartida.
+      Cada grupo es un círculo de confianza, una familia elegida que se apoya en los momentos difíciles y celebra las victorias como propias.
+      Aquí, el trabajo en equipo no es solo una estrategia: es la esencia de nuestra manera de cazar, de explorar y de aprender.
+      Ser parte de un grupo significa tener un lugar donde crecer, donde cada miembro aporta su fuerza única para forjar recuerdos inolvidables y dejar una huella en la historia común.
+    </p>
+
+    <!-- Imagen principal -->
+    <div class="flex justify-center mb-10">
+      <img src="/ImgPrincipal-Grupos.png" alt="Imagen Principal Grupos" class="rounded-xl shadow-lg w-full max-w-4xl" />
+    </div>
+
+
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+      Explora los grupos disponibles y únete al que resuene contigo. Cada grupo tiene una personalidad única, así que elige bien y prepárate para vivir aventuras inolvidables.
+    </p>
+
+<!--    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">-->
+<!--      <div *ngFor="let grupo of grupos" class="bg-blue-100 p-6 rounded-2xl shadow-xl flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">-->
+<!--        <img [src]="grupo.imagen" [alt]="grupo.nombre"-->
+<!--             class="w-32 h-32 object-cover rounded-full border-4 border-[#1E40AF] shadow-lg mb-4"/>-->
+<!--        <h2 class="text-2xl font-bold text-[#1E40AF] mb-2">{{ grupo.nombre }}</h2>-->
+<!--        <p class="text-[#1E3A8A] mb-4 px-2">{{ grupo.descripcion }}</p>-->
+<!--        <button class="bg-[#1E40AF] text-white py-2 px-6 rounded-full hover:bg-blue-900 transition duration-300 mt-auto">-->
+<!--          Unirse al grupo-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
+      <div *ngFor="let grupo of grupos" class="bg-blue-100 p-6 rounded-2xl shadow-xl flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">
+        <img [src]="grupo.imagen" [alt]="grupo.nombre"
+             class="w-32 h-32 object-cover rounded-full border-4 border-[#1E40AF] shadow-lg mb-4"/>
+        <h2 class="text-2xl font-bold text-[#1E40AF] mb-2">{{ grupo.nombre }}</h2>
+        <p class="text-[#1E3A8A] mb-4 px-2">{{ grupo.descripcion }}</p>
+        <button class="bg-[#1E40AF] text-white py-2 px-6 rounded-full hover:bg-blue-900 transition duration-300 mt-auto"
+                (click)="unirseAlGrupo(grupo)">
+          Unirse al grupo
+        </button>
+
+      </div>
+    </div>
+
+
+    <div class="bg-gray-50 p-8 rounded-xl mt-10 shadow-lg">
+      <h2 class="text-2xl font-bold text-blue-700 mb-4">Sobre los grupos</h2>
+      <p class="text-gray-600 mb-6">
+        Participar en un grupo no es solo cazar, es compartir, aprender y crecer en comunidad. Sé activo, apoya a tus compañeros y ayuda a construir un espacio positivo para todos.
+      </p>
+      <p class="text-gray-600">
+        Gracias por ser parte de esta aventura colectiva. ¡Nos vemos en el campo!
+      </p>
+    </div>
+
+    <div class="text-center mt-10">
+      <button class="bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition duration-300"
+              (click)="openNuevoGrupo()">
+        Sugerir Nuevo Grupo
+      </button>
+    </div>
+
+
+    <app-nuevo-grupo *ngIf="isNuevoGrupoOpen" (closeForm)="closeNuevoGrupo()"></app-nuevo-grupo>
+
+<!--    <div class="text-center mt-10">-->
+<!--      <button class="bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition duration-300">-->
+<!--        Sugerir Nuevo Grupo-->
+<!--      </button>-->
+<!--    </div>-->
+  </div>
+</div>
+
+
+<!--<div class="w-full flex h-full flex-col bg-gray-100 pb-10 -mt-10 lg:mt-0">-->
+<!--  <div class="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-xl mb-10 pb-10">-->
+<!--    <h1 class="text-5xl font-extrabold text-blue-700 mb-10">-->
+<!--      Nuestros Grupos de Caza-->
+<!--      <img src="/Emojicaza.png" alt="Grupos" class="w-16 h-16 inline-block ml-4"/>-->
+<!--    </h1>-->
+
+<!--    <p class="text-gray-600 mb-8 leading-relaxed">-->
+<!--      En nuestra comunidad, los grupos representan hermandades de cazadores con valores y objetivos comunes. Al unirte a uno, no solo accedes a nuevas experiencias, sino que formas parte de una historia compartida.-->
+<!--    </p>-->
+
+<!--    <p class="text-gray-600 mb-8 leading-relaxed">-->
+<!--      Explora los grupos disponibles y únete al que resuene contigo. Cada grupo tiene una personalidad única, así que elige bien y prepárate para vivir aventuras inolvidables.-->
+<!--    </p>-->
+
+<!--    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">-->
+<!--      <div *ngFor="let grupo of grupos" class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">-->
+<!--        <img [src]="grupo.imagen" [alt]="grupo.nombre"-->
+<!--             class="w-32 h-32 object-cover rounded-full border-4 border-blue-700 shadow-lg mb-4"/>-->
+<!--        <h2 class="text-2xl font-bold text-blue-700 mb-2">{{ grupo.nombre }}</h2>-->
+<!--        <p class="text-gray-600 mb-4 px-2">{{ grupo.descripcion }}</p>-->
+<!--        <button class="bg-blue-700 text-white py-2 px-6 rounded-full hover:bg-blue-800 transition duration-300 mt-auto">-->
+<!--          Unirse al grupo-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="text-center mt-10">-->
+<!--      <button class="bg-blue-700 text-white py-2 px-6 rounded-lg hover:bg-blue-800 transition duration-300">-->
+<!--        Sugerir Nuevo Grupo-->
+<!--      </button>-->
+<!--    </div>-->
+
+<!--    <div class="bg-gray-50 p-8 rounded-xl mt-10 shadow-lg">-->
+<!--      <h2 class="text-2xl font-bold text-blue-700 mb-4">Sobre los grupos</h2>-->
+<!--      <p class="text-gray-600 mb-6">-->
+<!--        Participar en un grupo no es solo cazar, es compartir, aprender y crecer en comunidad. Sé activo, apoya a tus compañeros y ayuda a construir un espacio positivo para todos.-->
+<!--      </p>-->
+<!--      <p class="text-gray-600">-->
+<!--        Gracias por ser parte de esta aventura colectiva. ¡Nos vemos en el campo!-->
+<!--      </p>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
