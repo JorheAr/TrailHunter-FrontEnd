@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {ExtraOptions, Routes} from '@angular/router';
 import {AuthComponent} from '../page/auth/auth.component';
 import {QuienesSomosComponent} from '../page/quienes-somos/quienes-somos';
 import {ContactoComponent} from '../page/contacto/contacto.component';
@@ -14,6 +14,15 @@ import {ExplorarComponent} from '../page/explorar/explorar.component';
 import {UserViewComponent} from '../page/user-view/user-view.component';
 import {ActividadesComponent} from '../page/actividades/actividades.component';
 import {NuevaActividadComponent} from '../component/nueva-actividad/nueva-actividad.component';
+import {GruposComponent} from '../page/grupos/grupos.component';
+import {NuevoGrupoComponent} from '../component/nuevo-grupo/nuevo-grupo.component';
+
+
+const routerOptions: ExtraOptions = {
+  scrollPositionRestoration: 'enabled',
+  anchorScrolling: 'enabled',
+  scrollOffset: [0, 0]
+};
 import {DetalleActividadComponent} from '../page/detalle-actividad/detalle-actividad.component';
 
 
@@ -24,7 +33,9 @@ export const routes: Routes = [
   {'path': 'home', 'component': HomeComponent},
   {'path': 'profile', 'component': ProfileComponent},
   {'path': 'explorar', 'component': ExplorarComponent},
+  {'path': 'nuevo-grupo', 'component': NuevoGrupoComponent},
   {'path': 'nueva-actividad', 'component': NuevaActividadComponent},
+  {'path': 'grupos', 'component': GruposComponent},
   {'path': 'actividades', 'component': ActividadesComponent},
   { path: 'actividad/:id', component: DetalleActividadComponent },
   { path: 'usuario/:id', 'component': UserViewComponent },
