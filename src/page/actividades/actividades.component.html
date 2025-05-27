@@ -1,6 +1,7 @@
 <div class="w-full flex h-full flex-col bg-white pb-10 -mt-10 lg:mt-0">
   <div class="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl mb-10 pb-10">
-    <h1 class="text-5xl font-extrabold text-green-700 mb-10">Nuestras actividades programadas
+    <h1 class="text-5xl font-extrabold text-green-700 mb-10">
+      Nuestras actividades programadas
       <img src="/Emojicaza.png" alt="Actividades" class="w-16 h-16 inline-block ml-4"/>
     </h1>
 
@@ -12,7 +13,11 @@
       Si decides apuntarte a alguna de nuestras actividades, recuerda que tu asistencia es fundamental. Al confirmar tu participación, te comprometes a respetar los horarios, seguir las instrucciones de los organizadores y contribuir al desarrollo armonioso del evento. Tu presencia cuenta y es clave para el éxito de nuestras actividades.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
-      <div *ngFor="let actividad of actividades" class="bg-gray-50 p-6 rounded-lg shadow-lg flex flex-col justify-between">
+      <div
+        *ngFor="let actividad of actividades"
+        class="bg-gray-50 p-6 rounded-lg shadow-lg flex flex-col justify-between cursor-pointer hover:shadow-xl transition"
+        (click)="verDetalle(actividad.id)"
+      >
         <div>
           <img [src]="actividad.imagen" [alt]="actividad.titulo" class="w-full h-48 object-cover mb-4 rounded-lg"/>
           <h2 class="text-xl font-semibold text-green-700 mb-2">{{ actividad.titulo }}</h2>
@@ -22,8 +27,12 @@
           <p class="text-gray-500 mb-4">Capacidad: {{ actividad.capacidad }}</p>
         </div>
         <div class="mt-auto">
-          <button class="bg-green-700 text-white py-2 px-4 rounded-lg w-full mt-4 hover:bg-green-800 transition duration-300"
-                  (click)="inscribirse(actividad)">Apuntarse</button>
+          <button
+            class="bg-green-700 text-white py-2 px-4 rounded-lg w-full mt-4 hover:bg-green-800 transition duration-300"
+            (click)="$event.stopPropagation()"
+          >
+            Apuntarse
+          </button>
         </div>
       </div>
     </div>
@@ -33,7 +42,6 @@
               (click)="openNuevaActividad()">Sugerir Nueva Actividad</button>
     </div>
 
-    <!-- Renderiza el componente de nueva actividad -->
     <app-nueva-actividad *ngIf="isNuevaActividadOpen" (closeForm)="closeNuevaActividad()"></app-nueva-actividad>
 
     <div class="bg-gray-50 p-8 rounded-xl mt-10 shadow-lg">
@@ -48,6 +56,5 @@
         Gracias por ser parte de nuestra comunidad comprometida. Juntos, hacemos de cada evento una experiencia enriquecedora y segura para todos.
       </p>
     </div>
-
   </div>
 </div>
