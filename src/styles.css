@@ -18,3 +18,14 @@ body {
 .p-dialog {
   z-index: 999; /* Ajusta este valor si es necesario */
 }
+
+/* Evita que se vean los slides laterales en el carrusel */
+.swiper-container {
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.swiper-slide {
+  width: 100% !important;
+}
