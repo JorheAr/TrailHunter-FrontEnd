@@ -147,6 +147,23 @@
       </div>
 
       <div class="field">
+        <label for="lugar" class="block mb-2 font-medium">Lugar</label>
+        <input
+          id="lugar"
+          type="text"
+          pInputText
+          [(ngModel)]="formData.lugar"
+          name="lugar"
+          required
+          #lugar="ngModel"
+          class="w-full"
+        />
+        <div *ngIf="lugar.invalid && lugar.touched" class="text-red-600">
+          El lugar es requerido.
+        </div>
+      </div>
+
+      <div class="field">
         <label for="cupo_maximo" class="block mb-2 font-medium">Cupo máximo</label>
         <p-inputNumber
           id="cupo_maximo"

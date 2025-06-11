@@ -2,11 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'app-nuevo-grupo',
-  imports: [
-    FormsModule
-  ],
-  templateUrl: './nuevo-grupo.component.html'
+    selector: 'app-nuevo-grupo',
+    imports: [
+        FormsModule
+    ],
+    standalone: true,
+    templateUrl: './nuevo-grupo.component.html'
 })
 export class NuevoGrupoComponent {
   nombre: string = '';

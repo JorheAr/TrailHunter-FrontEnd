@@ -25,7 +25,7 @@ export class ActividadesComponent implements OnInit {
         this.actividades = (data as any[]).slice(0, 6).map(act => ({
           ...act,
           imagen: act.imagen_url,
-          lugar: 'Ubicación no especificada',
+          lugar: act.lugar,
           capacidad: `${act.inscritos}/${act.cupo_maximo}`,
           fecha: new Date(act.fecha).toLocaleDateString()
         }));

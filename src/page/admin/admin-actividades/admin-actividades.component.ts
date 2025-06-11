@@ -46,6 +46,7 @@ export class AdminActividadesComponent implements OnInit {
     titulo: '',
     descripcion: '',
     fecha: '',
+    lugar: '',
     cupo_maximo: null as number | null,
     imagen_url: ''
   };
@@ -110,13 +111,14 @@ export class AdminActividadesComponent implements OnInit {
       titulo: '',
       descripcion: '',
       fecha: '',
+      lugar: '',
       cupo_maximo: null,
       imagen_url: ''
     };
   }
 
   handleSubmit(): void {
-    if (!this.formData.titulo || !this.formData.descripcion || !this.formData.fecha || !this.formData.cupo_maximo) {
+    if (!this.formData.titulo || !this.formData.descripcion || !this.formData.lugar ||  !this.formData.fecha || !this.formData.cupo_maximo) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Validación',
@@ -132,6 +134,7 @@ export class AdminActividadesComponent implements OnInit {
       titulo: this.formData.titulo,
       descripcion: this.formData.descripcion,
       fecha: this.formData.fecha,
+      lugar: this.formData.lugar || 'No especificado',
       cupo_maximo: this.formData.cupo_maximo,
       imagen_url: this.formData.imagen_url || null
     };

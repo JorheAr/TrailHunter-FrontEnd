@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable, of, tap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CaceriaService {
   private baseUrl = 'http://localhost:5000/caceria';
+  private actividadesCache: any[] | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -16,8 +17,13 @@ export class CaceriaService {
   }
 
   // Obtener actividades públicas
-  obtenerTodas(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/todas`);
+  obtenerTodas(): Observable<any[]> {
+    if (this.actividadesCache) {
+      return of(this.actividadesCache);
+    }
+    return this.http.get<any[]>(`${this.baseUrl}/todas`).pipe(
+      tap(actividades => this.actividadesCache = actividades)
+    );
   }
 
   // Obtener actividades del usuario autenticado
@@ -58,6 +64,7 @@ export class CaceriaService {
       titulo: data.titulo,
       descripcion: data.descripcion,
       fecha: this.formatDateTime(data.fecha),
+      lugar: data.lugar,
       cupo_maximo: data.cupo_maximo,
       imagen_url: data.imagen_url || null
     };
@@ -69,4 +76,21 @@ export class CaceriaService {
   formatDateTime(date: Date): string {
     return date.toISOString().split('T')[0];
   }
+
+  // Comentar en una actividad
+  comentarActividad(actividadId: number, texto: string): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/actividades/${actividadId}/comentarios`,
+      { texto },
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // Obtener comentarios de una actividad
+  obtenerComentarios(actividadId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/actividades/${actividadId}/comentarios`);
+  }
+
 }
+
+

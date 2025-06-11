@@ -24,6 +24,7 @@ const routerOptions: ExtraOptions = {
   scrollOffset: [0, 0]
 };
 import {DetalleActividadComponent} from '../page/detalle-actividad/detalle-actividad.component';
+import {DetalleGrupoComponent} from '../page/detalle-grupo/detalle-grupo.component';
 
 
 export const routes: Routes = [
@@ -37,8 +38,9 @@ export const routes: Routes = [
   {'path': 'nueva-actividad', 'component': NuevaActividadComponent},
   {'path': 'grupos', 'component': GruposComponent},
   {'path': 'actividades', 'component': ActividadesComponent},
-  { path: 'actividad/:id', component: DetalleActividadComponent },
-  { path: 'usuario/:id', 'component': UserViewComponent },
+  {'path': 'actividad/:id', 'component': DetalleActividadComponent },
+  {'path': 'usuario/:id', 'component': UserViewComponent },
+  {'path': 'grupo/:id', 'component': DetalleGrupoComponent },
   {
     path: 'admin',
     component: AdminComponent,

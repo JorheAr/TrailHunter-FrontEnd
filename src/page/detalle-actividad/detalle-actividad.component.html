@@ -17,6 +17,7 @@
     <div class="mt-6">
       <h1 class="text-3xl font-bold mb-4">{{ actividad.titulo }}</h1>
       <p class="mb-2"><strong>Fecha:</strong> {{ actividad.fecha | date:'fullDate' }}</p>
+      <p class="mb-2"><strong>Lugar:</strong> {{ actividad.lugar }} </p>
       <p class="mb-2"><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
       <p class="mb-2"><strong>Cupo máximo:</strong> {{ actividad.cupo_maximo }}</p>
       <p class="mb-2"><strong>Inscritos:</strong> {{ actividad.inscritos }}</p>
@@ -51,19 +52,22 @@
     <div class="mt-10">
       <h2 class="text-2xl font-semibold mb-4">Comentarios</h2>
 
-      <!-- Comentarios estáticos -->
-      <div class="space-y-4 mb-6">
-        <div class="bg-gray-100 p-4 rounded shadow-sm">
-          <p class="font-semibold">Juan Pérez</p>
-          <p>¡Muy buena actividad, espero poder asistir!</p>
-          <p class="text-sm text-gray-500">Publicado hace 2 días</p>
-        </div>
-        <div class="bg-gray-100 p-4 rounded shadow-sm">
-          <p class="font-semibold">María López</p>
-          <p>¿Es necesario tener experiencia previa para participar?</p>
-          <p class="text-sm text-gray-500">Publicado hace 1 día</p>
+      <div
+        class="space-y-4 mb-6"
+        [ngClass]="{
+    'max-h-96 overflow-y-auto pr-2': comentarios.length > 5
+  }"
+      >
+        <div
+          *ngFor="let comentario of comentarios"
+          class="bg-gray-100 p-4 rounded shadow-sm"
+        >
+          <p class="font-semibold">{{ comentario.autor }}</p>
+          <p>{{ comentario.texto }}</p>
+          <p class="text-sm text-gray-500">{{ comentario.fecha }}</p>
         </div>
       </div>
+
 
       <!-- Campo para escribir nuevo comentario -->
       <form (submit)="enviarComentario($event)" class="flex flex-col gap-2">
@@ -112,3 +116,5 @@
   </div>
 
 </div>
+
+<p-toast></p-toast>

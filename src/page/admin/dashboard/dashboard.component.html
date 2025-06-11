@@ -1,1 +1,42 @@
-<p>dashboard works!</p>
+<div *ngIf="loading" class="text-center mt-4">Cargando estadísticas...</div>
+
+<div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+  <!-- Usuarios -->
+  <p-card header="Usuarios" class="w-full h-[400px]">
+    <div class="chart-container">
+      <apx-chart
+        [series]="chartOptionsUsuarios.series"
+        [chart]="chartOptionsUsuarios.chart"
+        [labels]="chartOptionsUsuarios.labels"
+        [responsive]="chartOptionsUsuarios.responsive"
+        [title]="chartOptionsUsuarios.title">
+      </apx-chart>
+    </div>
+  </p-card>
+
+  <!-- Actividades -->
+  <p-card header="Actividades" class="w-full h-[400px]">
+    <div class="chart-container">
+      <apx-chart
+        [series]="chartOptionsActividades.series"
+        [chart]="chartOptionsActividades.chart"
+        [xaxis]="chartOptionsActividades.xaxis"
+        [responsive]="chartOptionsActividades.responsive"
+        [title]="chartOptionsActividades.title">
+      </apx-chart>
+    </div>
+  </p-card>
+
+  <!-- Inscripciones -->
+  <p-card header="Inscripciones" class="w-full h-[400px]">
+    <div class="chart-container">
+      <apx-chart
+        [series]="chartOptionsInscripciones.series"
+        [chart]="chartOptionsInscripciones.chart"
+        [xaxis]="chartOptionsInscripciones.xaxis"
+        [responsive]="chartOptionsInscripciones.responsive"
+        [title]="chartOptionsInscripciones.title">
+      </apx-chart>
+    </div>
+  </p-card>
+</div>

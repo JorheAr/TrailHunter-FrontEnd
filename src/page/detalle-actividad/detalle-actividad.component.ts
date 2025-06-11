@@ -6,12 +6,13 @@ import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';
-import { FormsModule } from '@angular/forms'; // Para ngModel
+import { FormsModule } from '@angular/forms';
+import {Toast} from 'primeng/toast'; // Para ngModel
 
 @Component({
   selector: 'app-detalle-actividad',
   standalone: true,
-  imports: [CommonModule, ButtonModule, ProgressBarModule, ProgressSpinnerModule, FormsModule],
+  imports: [CommonModule, ButtonModule, ProgressBarModule, ProgressSpinnerModule, FormsModule, Toast],
   providers: [MessageService],
   templateUrl: './detalle-actividad.component.html'
 })
@@ -22,10 +23,7 @@ export class DetalleActividadComponent implements OnInit {
   desinscribiendo = false;
   estaInscrito = false;
 
-  comentarios: { autor: string; texto: string; fecha: string }[] = [
-    { autor: 'Juan Pérez', texto: '¡Muy buena actividad, espero poder asistir!', fecha: 'Publicado hace 2 días' },
-    { autor: 'María López', texto: '¿Es necesario tener experiencia previa para participar?', fecha: 'Publicado hace 1 día' }
-  ];
+  comentarios: { autor: string; texto: string; fecha: string }[] = [];
   nuevoComentario = '';
   enviandoComentario = false;
 
@@ -39,6 +37,7 @@ export class DetalleActividadComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.cargarActividad(+id);
+      this.cargarComentarios(+id);
     } else {
       this.loading = false;
     }
@@ -57,6 +56,21 @@ export class DetalleActividadComponent implements OnInit {
       error: (err) => {
         console.error('Error al obtener actividad', err);
         this.loading = false;
+      }
+    });
+  }
+
+  cargarComentarios(id: number) {
+    this.caceriaService.obtenerComentarios(id).subscribe({
+      next: (comentarios) => {
+        this.comentarios = comentarios.map((c: any) => ({
+          autor: c.autor || 'Anónimo',
+          texto: c.texto,
+          fecha: this.formatearFecha(c.fecha)
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar comentarios', err);
       }
     });
   }
@@ -119,19 +133,36 @@ export class DetalleActividadComponent implements OnInit {
 
   enviarComentario(event: Event) {
     event.preventDefault();
-    if (!this.nuevoComentario.trim()) return;
+    if (!this.nuevoComentario.trim() || !this.actividad) return;
 
     this.enviandoComentario = true;
 
-    setTimeout(() => {
-      this.comentarios.push({
-        autor: 'Usuario Actual',
-        texto: this.nuevoComentario.trim(),
-        fecha: 'Hace unos segundos'
-      });
-      this.nuevoComentario = '';
-      this.enviandoComentario = false;
-      this.messageService.add({severity:'success', summary:'Comentario', detail:'Comentario agregado correctamente.'});
-    }, 800);
+    this.caceriaService.comentarActividad(this.actividad.id, this.nuevoComentario.trim()).subscribe({
+      next: () => {
+        this.messageService.add({severity:'success', summary:'Comentario', detail:'Comentario agregado correctamente.'});
+        this.nuevoComentario = '';
+        this.cargarComentarios(this.actividad.id);
+        this.enviandoComentario = false;
+      },
+      error: (err) => {
+        console.error('Error al enviar comentario', err);
+        this.messageService.add({severity:'error', summary:'Error', detail:'No se pudo enviar el comentario.'});
+        this.enviandoComentario = false;
+      }
+    });
+  }
+
+  private formatearFecha(fechaISO: string): string {
+    const fecha = new Date(fechaISO);
+    const ahora = new Date();
+    const diferenciaMs = ahora.getTime() - fecha.getTime();
+    const minutos = Math.floor(diferenciaMs / 60000);
+    const horas = Math.floor(minutos / 60);
+    const dias = Math.floor(horas / 24);
+
+    if (dias > 0) return `Publicado hace ${dias} día${dias > 1 ? 's' : ''}`;
+    if (horas > 0) return `Publicado hace ${horas} hora${horas > 1 ? 's' : ''}`;
+    if (minutos > 0) return `Publicado hace ${minutos} minuto${minutos > 1 ? 's' : ''}`;
+    return 'Publicado hace unos segundos';
   }
 }
