@@ -1,0 +1,120 @@
+<div *ngIf="!loading && actividad" class="flex flex-wrap justify-center items-start gap-8">
+
+  <!-- Izquierda: imagen + información completa -->
+  <div class="flex-1 max-w-3xl p-8 min-w-[320px]">
+    <div>
+      <img
+        *ngIf="actividad.imagen_url"
+        [src]="actividad.imagen_url"
+        alt="Imagen de la actividad"
+        class="w-full h-64 object-cover rounded"
+      />
+      <div *ngIf="!actividad.imagen_url" class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-500 rounded">
+        Sin imagen
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h1 class="text-3xl font-bold mb-4">{{ actividad.titulo }}</h1>
+      <p class="mb-2"><strong>Fecha:</strong> {{ actividad.fecha | date:'fullDate' }}</p>
+      <p class="mb-2"><strong>Lugar:</strong> {{ actividad.lugar }} </p>
+      <p class="mb-2"><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
+      <p class="mb-2"><strong>Cupo máximo:</strong> {{ actividad.cupo_maximo }}</p>
+      <p class="mb-2"><strong>Inscritos:</strong> {{ actividad.inscritos }}</p>
+    </div>
+
+    <!-- Estado de inscripción MÓVIL (visible solo en pantallas pequeñas) -->
+    <div class="block lg:hidden mt-8 w-full">
+      <h2 class="text-xl font-semibold mb-2">Estado de inscripción</h2>
+
+      <p-progressBar [value]="porcentajeLleno()" [showValue]="true" class="w-full"></p-progressBar>
+      <p class="text-center">{{ actividad.inscritos }} / {{ actividad.cupo_maximo }} inscritos</p>
+
+      <button
+        pButton
+        type="button"
+        [label]="estaInscrito ? 'Quitar inscripción' : 'Inscribirse'"
+        [icon]="estaInscrito ? 'pi pi-times' : 'pi pi-check'"
+        class="w-full mt-4"
+        [disabled]="
+          (estaInscrito ? desinscribiendo : inscribiendo) ||
+          (!estaInscrito && !puedeInscribirse())
+        "
+        (click)="estaInscrito ? desinscribirse() : inscribirse()"
+      ></button>
+
+      <p *ngIf="!puedeInscribirse() && !estaInscrito" class="text-center text-red-600 font-semibold">
+        Cupo máximo alcanzado
+      </p>
+    </div>
+
+    <!-- Comentarios -->
+    <div class="mt-10">
+      <h2 class="text-2xl font-semibold mb-4">Comentarios</h2>
+
+      <div
+        class="space-y-4 mb-6"
+        [ngClass]="{
+    'max-h-96 overflow-y-auto pr-2': comentarios.length > 5
+  }"
+      >
+        <div
+          *ngFor="let comentario of comentarios"
+          class="bg-gray-100 p-4 rounded shadow-sm"
+        >
+          <p class="font-semibold">{{ comentario.autor }}</p>
+          <p>{{ comentario.texto }}</p>
+          <p class="text-sm text-gray-500">{{ comentario.fecha }}</p>
+        </div>
+      </div>
+
+
+      <!-- Campo para escribir nuevo comentario -->
+      <form (submit)="enviarComentario($event)" class="flex flex-col gap-2">
+        <textarea
+          [(ngModel)]="nuevoComentario"
+          name="comentario"
+          rows="4"
+          placeholder="Escribe tu comentario..."
+          class="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        ></textarea>
+        <button
+          pButton
+          type="submit"
+          label="Enviar comentario"
+          class="self-end"
+          [disabled]="!nuevoComentario || enviandoComentario"
+        ></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Derecha: estado de inscripción escritorio -->
+  <div class="hidden lg:flex w-72 flex-col gap-4 sticky top-20 self-start">
+    <h2 class="text-xl font-semibold mb-2">Estado de inscripción</h2>
+
+    <p-progressBar [value]="porcentajeLleno()" [showValue]="true" class="w-full"></p-progressBar>
+    <p class="text-center">{{ actividad.inscritos }} / {{ actividad.cupo_maximo }} inscritos</p>
+
+    <button
+      pButton
+      type="button"
+      [label]="estaInscrito ? 'Quitar inscripción' : 'Inscribirse'"
+      [icon]="estaInscrito ? 'pi pi-times' : 'pi pi-check'"
+      class="w-full mt-4"
+      [disabled]="
+        (estaInscrito ? desinscribiendo : inscribiendo) ||
+        (!estaInscrito && !puedeInscribirse())
+      "
+      (click)="estaInscrito ? desinscribirse() : inscribirse()"
+    ></button>
+
+    <p *ngIf="!puedeInscribirse() && !estaInscrito" class="text-center text-red-600 font-semibold">
+      Cupo máximo alcanzado
+    </p>
+  </div>
+
+</div>
+
+<p-toast></p-toast>

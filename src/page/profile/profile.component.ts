@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-import { MessageService } from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import { LoaderComponent } from '../../component/loader/loader.component';
-import { Router } from '@angular/router';
+import { CaceriaService } from '../../services/caceria.service';
+import {Router, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {Dialog} from 'primeng/dialog';
 import {InputText} from 'primeng/inputtext';
@@ -11,11 +12,13 @@ import {Toast} from 'primeng/toast';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {ButtonDirective} from 'primeng/button';
 import Swal from 'sweetalert2';
+import {Card} from 'primeng/card';
+import { GroupService } from '../../services/group.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText, Toast, ButtonDirective],
+  imports: [CommonModule, LoaderComponent, FormsModule, Dialog, InputText, Toast, ButtonDirective, Card, RouterLink, PrimeTemplate],
   templateUrl: './profile.component.html',
   providers: [MessageService]
 })
@@ -55,7 +58,14 @@ export class ProfileComponent implements OnInit {
   modalWidth = '50vw';
   editarPerfilWidth = '40vw';
 
-  constructor(private userService: UserService, private messageService: MessageService, private router: Router, private breakpointObserver: BreakpointObserver) {}
+  // Actividades
+  actividades: any[] = [];
+
+  mostrarDialogoCrearGrupo = false;
+  nuevoGrupo = { nombre: '', descripcion: '' };
+
+  constructor(private userService: UserService, private messageService: MessageService, private router: Router, private breakpointObserver: BreakpointObserver, private caceriaService : CaceriaService,     private groupService: GroupService,
+  ) {}
 
   ngOnInit(): void {
     const storedUsername = localStorage.getItem('username');
@@ -99,6 +109,8 @@ export class ProfileComponent implements OnInit {
         console.error('Error al obtener bloqueados', err);
       }
     });
+
+    this.cargarActividades();
   }
 
   abrirEditarPerfil() {
@@ -242,5 +254,49 @@ export class ProfileComponent implements OnInit {
 
   getAvatarUrl(username: string): string {
     return `https://api.dicebear.com/6.x/lorelei-neutral/png?seed=${username}`;
+  }
+
+  cargarActividades(): void {
+    this.caceriaService.obtenerMisActividades().subscribe({
+      next: (res) => {
+        this.actividades = res;
+      },
+      error: (err) => {
+        console.error('Error al cargar actividades', err);
+      }
+    });
+  }
+
+  crearGrupo() {
+    const creadorId = localStorage.getItem('user_id'); // Asegúrate de tenerlo guardado
+
+    if (!this.nuevoGrupo.nombre || !this.nuevoGrupo.descripcion) {
+      this.messageService.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Debes llenar todos los campos' });
+      return;
+    }
+
+    const data = {
+      nombre: this.nuevoGrupo.nombre,
+      descripcion: this.nuevoGrupo.descripcion,
+      creador_id: creadorId
+    };
+
+    this.groupService.crearGrupo(data).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Grupo creado', detail: 'Tu grupo ha sido creado exitosamente.' });
+        this.mostrarDialogoCrearGrupo = false;
+        this.nuevoGrupo = { nombre: '', descripcion: '' };
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear el grupo.' });
+      }
+    });
+  }
+
+  estadoActividad(fecha: string): string {
+    const hoy = new Date();
+    const fechaActividad = new Date(fecha);
+    return fechaActividad < hoy ? 'Finalizada' : 'Pendiente';
   }
 }

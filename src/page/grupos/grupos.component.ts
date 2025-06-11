@@ -1,51 +1,43 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NuevoGrupoComponent} from '../../component/nuevo-grupo/nuevo-grupo.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf, SlicePipe} from '@angular/common';
+import {GroupService} from '../../services/group.service';
+import {ToastModule} from 'primeng/toast';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-grupos',
   imports: [
     NuevoGrupoComponent,
     NgForOf,
-    NgIf
+    NgIf,
+    SlicePipe,
+    ToastModule
   ],
-  templateUrl: './grupos.component.html'
+  standalone: true,
+  templateUrl: './grupos.component.html',
+  providers: [MessageService],
 })
-export class GruposComponent {
-  grupos = [
-    {
-      nombre: 'Cazaconejos',
-      descripcion: 'Grupo especializado en caza menor, especialmente conejos. Fomentamos el aprendizaje entre generaciones y la precisión táctica. Ideal para quienes buscan técnica, compañerismo y buenos relatos junto al fuego.',
-      imagen: '/Img-Grupo-3-Conejos.png'
-    },
-    {
-      nombre: 'Los amigos de Pedro',
-      descripcion: 'Fundado por Pedro "El Zorro", este grupo reúne a apasionados de la caza en familia. Amamos las rutas largas, las noches de acampada y cocinar lo cazado. Amistad, humor y respeto a la fauna nos definen.',
-      imagen: '/Img-Grupo-1-pedro.png'
-    },
-    {
-      nombre: 'Soldados de Sylvanas',
-      descripcion: 'Inspirados en leyendas élficas, mezclamos arquería y tácticas sigilosas. Nos movemos como el viento por el bosque y honramos profundamente el equilibrio natural. Ideal para los cazadores más estratégicos.',
-      imagen: '/Img-Grupo-2-sylvanas.png'
-    },
-    {
-      nombre: 'Los pretendientes de Ashe',
-      descripcion: 'Elegantes, precisos y con un gusto impecable por el tiro perfecto. Este grupo honra a la cazadora legendaria Ashe, combinando estilo con eficacia. Nos entrenamos con arcos largos y somos conocidos por nuestros duelos amistosos al amanecer.',
-      imagen: '/Img-Grupo-4-ashe.png'
-    },
-    {
-      nombre: 'Los cavernícolas',
-      descripcion: 'Fieles a lo primitivo, cazamos como nuestros ancestros: sin tecnología, con astucia e instinto. Nos guía el fuego y nos fortalece la tierra. Ideal para quienes buscan una conexión profunda y salvaje con la naturaleza.',
-      imagen: '/Img-Grupo-5-cavernicolas.png'
-    },
-    {
-      nombre: 'Los matagigantes',
-      descripcion: 'Cazadores de grandes bestias, valientes frente a cualquier monstruo. Este grupo vive para el desafío, la adrenalina y los relatos heroicos. Si sueñas con enfrentar lo imposible, aquí es donde comienza tu leyenda.',
-      imagen: '/Img-Grupo-6-matagigantes.png'
-    }
-  ];
+export class GruposComponent implements OnInit{
+  grupos: any[] = [];
+  loading = true;
 
   isNuevoGrupoOpen = false;
+
+  constructor(private groupService: GroupService, private messageService: MessageService) {}
+
+  ngOnInit(): void {
+    this.groupService.obtenerTodosLosGrupos().subscribe({
+      next: data => {
+        this.grupos = data;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error cargando grupos', err);
+        this.loading = false;
+      }
+    });
+  }
 
   openNuevoGrupo() {
     console.log("Abriendo formulario nuevo grupo");
@@ -58,19 +50,21 @@ export class GruposComponent {
   }
 
   unirseAlGrupo(grupo: any): void {
-    const gruposUnidos = JSON.parse(localStorage.getItem('gruposUnidos') || '[]');
-
-    // Verifica si ya se unió
-    const yaUnido = gruposUnidos.some((g: any) => g.nombre === grupo.nombre);
-    if (yaUnido) {
-      alert(`Ya estás unido al grupo: ${grupo.nombre}`);
-      return;
-    }
-
-    gruposUnidos.push(grupo);
-    localStorage.setItem('gruposUnidos', JSON.stringify(gruposUnidos));
-
-    alert(`¡Te has unido al grupo "${grupo.nombre}" con éxito!`);
-    console.log('Grupo unido:', grupo);
+    this.groupService.unirseAGrupo(grupo.id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: `Te has unido al grupo: ${grupo.nombre}`,
+        });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Error al unirse al grupo',
+        });
+      }
+    });
   }
 }

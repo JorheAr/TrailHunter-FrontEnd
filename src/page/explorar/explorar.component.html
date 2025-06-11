@@ -45,71 +45,65 @@
           <p-datepicker
             [(ngModel)]="selectedFecha"
             dateFormat="dd/mm/yy"
+            placeholder="Selecciona una fecha"
+            showIcon="true"
             class="w-full"
-            styleClass="w-full"
           ></p-datepicker>
         </div>
 
-        <!-- Botones de acción -->
-        <div class="flex justify-evenly gap-2 pt-2">
-          <button pButton label="Limpiar" class="p-button-secondary" (click)="resetFiltros()"></button>
-          <button pButton label="Aplicar" class="p-button-success" (click)="aplicarFiltros(); filterPanel.hide()"></button>
-        </div>
+        <button pButton label="Aplicar filtros" (click)="filterPanel.hide(); aplicarFiltros()" class="w-full"></button>
       </div>
     </p-overlayPanel>
 
-    <!-- Tabs con botones -->
-    <div class="flex justify-center gap-4">
+    <!-- Tabs -->
+    <div class="flex justify-center gap-6 border-b border-gray-300 mb-6">
       <button
-        pButton
-        (click)="selectedTab = 'actividades'"
+        (click)="selectedTab = 'usuarios'; onUsuariosTabActivado()"
         [ngClass]="{
-          'bg-green-500 text-white': selectedTab === 'actividades',
-          'p-button-outlined': selectedTab !== 'actividades'
+          'border-green-500 text-green-500': selectedTab === 'usuarios',
+          'border-transparent text-gray-500': selectedTab !== 'usuarios'
         }"
-        class="px-6 py-2 rounded-xl transition-colors duration-300"
-      >
-        Actividades
-      </button>
-      <button
-        pButton
-        (click)="selectedTab = 'usuarios'"
-        [ngClass]="{
-          'bg-green-500 text-white': selectedTab === 'usuarios',
-          'p-button-outlined': selectedTab !== 'usuarios'
-        }"
-        class="px-6 py-2 rounded-xl transition-colors duration-300"
+        class="border-b-2 px-4 py-2 font-semibold focus:outline-none"
       >
         Usuarios
       </button>
       <button
-        pButton
+        (click)="selectedTab = 'actividades'"
+        [ngClass]="{
+          'border-green-500 text-green-500': selectedTab === 'actividades',
+          'border-transparent text-gray-500': selectedTab !== 'actividades'
+        }"
+        class="border-b-2 px-4 py-2 font-semibold focus:outline-none"
+      >
+        Actividades
+      </button>
+      <button
         (click)="selectedTab = 'grupos'"
         [ngClass]="{
-          'bg-green-500 text-white': selectedTab === 'grupos',
-          'p-button-outlined': selectedTab !== 'grupos'
+          'border-green-500 text-green-500': selectedTab === 'grupos',
+          'border-transparent text-gray-500': selectedTab !== 'grupos'
         }"
-        class="px-6 py-2 rounded-xl transition-colors duration-300"
+        class="border-b-2 px-4 py-2 font-semibold focus:outline-none"
       >
         Grupos
       </button>
     </div>
 
-    <!-- Vista dinámica -->
-    <div class="mt-8">
-      <ng-container [ngSwitch]="selectedTab">
-        <app-buscar-usuarios
-          *ngSwitchCase="'usuarios'"
-          [query]="searchQuery"
-          [cache]="usuariosCacheados"
-          [cargando]="usuariosCargando"
-          (onLoad)="onUsuariosCargados($event)"
-          (loadTrigger)="onUsuariosTabActivado()"
-        ></app-buscar-usuarios>
-        <app-buscar-actividades *ngSwitchCase="'actividades'" [query]="searchQuery"></app-buscar-actividades>
-        <app-buscar-grupos *ngSwitchCase="'grupos'" [query]="searchQuery"></app-buscar-grupos>
-      </ng-container>
-    </div>
+    <!-- Contenido por pestaña -->
+    <ng-container [ngSwitch]="selectedTab">
 
+      <app-buscar-usuarios *ngSwitchCase="'usuarios'" [query]="searchQuery"></app-buscar-usuarios>
+
+      <app-buscar-actividades
+        *ngSwitchCase="'actividades'"
+        [query]="searchQuery"
+        [categoria]="selectedCategoria"
+        [fecha]="selectedFecha"
+      >
+      </app-buscar-actividades>
+
+      <app-buscar-grupos *ngSwitchCase="'grupos'" [query]="searchQuery"></app-buscar-grupos>
+
+    </ng-container>
   </div>
 </div>

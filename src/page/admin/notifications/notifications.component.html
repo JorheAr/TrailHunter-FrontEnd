@@ -19,19 +19,24 @@
     No hay mensajes.
   </div>
 
-  <div *ngIf="mensajesFiltrados.length > 0" [ngClass]="{'max-h-96 overflow-y-auto': mensajesFiltrados.length > 5}" class="space-y-4">
-    <ul>
-      <li *ngFor="let mensaje of mensajesFiltrados" class="bg-white shadow p-4 rounded-md">
-        <p class="text-sm text-gray-500">{{ mensaje.fecha_envio }}</p>
-        <p><strong>Nombre:</strong> {{ mensaje.nombre }}</p>
-        <p><strong>Correo:</strong> {{ mensaje.correo }}</p>
-        <p><strong>Mensaje:</strong></p>
-        <p class="whitespace-pre-line">{{ mensaje.mensaje }}</p>
-        <p><strong>Estado:</strong> {{ mensaje.leido ? 'Leído' : 'No leído' }}</p>
-        <button *ngIf="!mensaje.leido" (click)="marcarComoLeido(mensaje)" class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
-          Marcar como leído
-        </button>
-      </li>
-    </ul>
-  </div>
+  <!-- Contenedor con separación vertical entre los <li> -->
+  <!-- Lista de mensajes -->
+  <ul *ngIf="mensajesFiltrados.length > 0"
+      class="space-y-4 max-h-120 overflow-y-auto">
+    <li *ngFor="let mensaje of mensajesFiltrados"
+        class="bg-white shadow p-4 rounded-md">
+      <p class="text-sm text-gray-500">{{ mensaje.fecha_envio }}</p>
+      <p><strong>Nombre:</strong> {{ mensaje.nombre }}</p>
+      <p><strong>Correo:</strong> {{ mensaje.correo }}</p>
+      <p><strong>Mensaje:</strong></p>
+      <p class="whitespace-pre-line">{{ mensaje.mensaje }}</p>
+      <p><strong>Estado:</strong> {{ mensaje.leido ? 'Leído' : 'No leído' }}</p>
+
+      <button *ngIf="!mensaje.leido"
+              (click)="marcarComoLeido(mensaje)"
+              class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Marcar como leído
+      </button>
+    </li>
+  </ul>
 </div>

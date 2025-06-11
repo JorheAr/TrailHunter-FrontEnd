@@ -19,10 +19,12 @@ import {NuevoGrupoComponent} from '../component/nuevo-grupo/nuevo-grupo.componen
 
 
 const routerOptions: ExtraOptions = {
-  scrollPositionRestoration: 'enabled', // Esto es clave
-  anchorScrolling: 'enabled',           // (opcional) permite navegar con #anclas
-  scrollOffset: [0, 0]                  // (opcional) para compensar headers fijos
+  scrollPositionRestoration: 'enabled',
+  anchorScrolling: 'enabled',
+  scrollOffset: [0, 0]
 };
+import {DetalleActividadComponent} from '../page/detalle-actividad/detalle-actividad.component';
+import {DetalleGrupoComponent} from '../page/detalle-grupo/detalle-grupo.component';
 
 
 export const routes: Routes = [
@@ -36,7 +38,9 @@ export const routes: Routes = [
   {'path': 'nueva-actividad', 'component': NuevaActividadComponent},
   {'path': 'grupos', 'component': GruposComponent},
   {'path': 'actividades', 'component': ActividadesComponent},
-  { path: 'usuario/:id', 'component': UserViewComponent },
+  {'path': 'actividad/:id', 'component': DetalleActividadComponent },
+  {'path': 'usuario/:id', 'component': UserViewComponent },
+  {'path': 'grupo/:id', 'component': DetalleGrupoComponent },
   {
     path: 'admin',
     component: AdminComponent,
@@ -45,6 +49,7 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('../page/admin/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'usuarios', loadComponent: () => import('../page/admin/usuarios/usuarios.component').then(m => m.UsuariosComponent) },
       { path: 'notificaciones', loadComponent: () => import('../page/admin/notifications/notifications.component').then(m => m.NotificationsComponent) },
+      { path: 'admin-actividades', loadComponent: () => import('../page/admin/admin-actividades/admin-actividades.component').then(m => m.AdminActividadesComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ]
   },

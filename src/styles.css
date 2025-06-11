@@ -26,6 +26,11 @@ body {
   max-width: 100%;
 }
 
+.chart-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .swiper-slide {
   width: 100% !important;
 }

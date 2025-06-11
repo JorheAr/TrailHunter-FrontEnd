@@ -1,0 +1,20 @@
+/* Estado cuando NO ha votado (verde texto y borde, fondo blanco) */
+.btn-like-votar {
+  color: #10b981 !important;
+  background-color: white !important;
+}
+
+.btn-like-votar:hover {
+  background-color:  #c8f7d6 !important; /* verde claro */
+}
+
+/* Estado cuando SÍ ha votado (blanco texto/icono y fondo verde) */
+.btn-like-votado {
+  color: white !important;
+  background-color: #28a745 !important;
+
+}
+
+.btn-like-votado:hover {
+  background-color: #1e7e34 !important; /* verde más oscuro */
+}

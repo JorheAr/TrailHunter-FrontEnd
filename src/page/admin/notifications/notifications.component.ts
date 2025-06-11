@@ -10,7 +10,6 @@ import { SelectButtonModule } from 'primeng/selectbutton';
   imports: [
     NgIf,
     NgForOf,
-    NgClass,
     FormsModule,
     SelectButtonModule
   ],

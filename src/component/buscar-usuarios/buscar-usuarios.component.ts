@@ -98,10 +98,9 @@ export class BuscarUsuariosComponent implements OnInit, OnChanges {
     this.actualizarEstadoSeguir(userId, true);
     this.userService.followUser(userId).subscribe({
       next: () => {
-        // Aquí puedes agregar lógica si es necesario cuando se sigue con éxito
+
       },
       error: (error) => {
-        // Mostrar el error en un p-toast
         this.messageService.add({
           severity: 'error',
           summary: 'Error al seguir al usuario',

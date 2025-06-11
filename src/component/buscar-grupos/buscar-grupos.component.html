@@ -1,6 +1,41 @@
-<div class="space-y-2">
+<div class="space-y-4">
   <p *ngIf="query">Resultados para "{{ query }}":</p>
-  <ul class="list-disc ml-4">
-    <li *ngFor="let grupo of resultadosFiltrados">{{ grupo.nombre }}</li>
-  </ul>
+
+  <p-progressSpinner *ngIf="loading" styleClass="block mx-auto"></p-progressSpinner>
+
+  <div *ngIf="!loading && resultadosFiltrados.length === 0">
+    <p>No se encontraron grupos.</p>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" *ngIf="!loading && resultadosFiltrados.length > 0">
+    <p-card *ngFor="let grupo of resultadosFiltrados" [style]="{'cursor':'pointer'}" [routerLink]="['/grupo', grupo.id]">
+      <ng-template pTemplate="header">
+        <img
+          *ngIf="grupo.imagen_url"
+          [src]="grupo.imagen_url"
+          alt="Imagen del grupo"
+          class="w-full h-48 object-cover rounded-t"
+        />
+        <div *ngIf="!grupo.imagen_url" class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+          Sin imagen
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="content">
+        <h2 class="text-lg font-semibold mb-2 overflow-hidden text-ellipsis whitespace-nowrap">
+          {{ grupo.nombre }}
+        </h2>
+        <p class="text-sm text-gray-600 line-clamp-2">{{ grupo.descripcion }}</p>
+      </ng-template>
+    </p-card>
+  </div>
+
+  <p-paginator
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [first]="page * rows"
+    (onPageChange)="onPageChange($event)"
+    *ngIf="!loading && totalRecords > rows"
+    styleClass="mt-4"
+  ></p-paginator>
 </div>
